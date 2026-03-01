@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifySessionToken } from '@/lib/telegram/verify';
+import { verifySessionToken } from '@/lib/auth';
 import { uploadAvatar, uploadLocationImage, uploadCharacterAvatar } from '@/lib/cloudinary';
 
 // POST /api/upload - Upload image to Cloudinary

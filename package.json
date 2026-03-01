@@ -1,7 +1,7 @@
 {
   "name": "life-rpg",
   "version": "1.0.0",
-  "description": "Life gamification app with Telegram integration",
+  "description": "Life gamification web app - complete quests, develop skills, achieve goals",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,21 +11,16 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio",
-    "bot:setup": "tsx scripts/setup-telegram-webhook.ts"
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@grammyjs/types": "^3.8.0",
     "@neondatabase/serverless": "^1.0.2",
-    "@twa-dev/sdk": "^6.9.0",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^1.41.0",
     "clsx": "^2.1.0",
     "dotenv": "^17.3.1",
     "drizzle-orm": "^0.45.1",
-    "grammy": "^1.19.0",
     "jose": "^5.2.0",
-    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.312.0",
     "next": "^16.1.6",
     "react": "^18.2.0",
@@ -35,7 +30,6 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",

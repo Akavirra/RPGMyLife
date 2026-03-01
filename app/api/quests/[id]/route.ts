@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { quests, users, questSkills, activityLog, skills } from '@/lib/db/schema';
 import { eq, and } from 'drizzle-orm';
-import { verifySessionToken } from '@/lib/telegram/verify';
+import { verifySessionToken } from '@/lib/auth';
 import { checkLevelUp, checkSkillLevelUp } from '@/lib/game/level-server';
 import { calculateXpReward, calculateFailurePenalty } from '@/lib/game/xp';
-import { notifyQuestCompleted, notifyQuestFailed, notifyLevelUp } from '@/lib/telegram/notifications';
 
 // GET /api/quests/[id] - Get single quest
 export async function GET(
@@ -126,17 +125,7 @@ export async function PATCH(
             },
           });
 
-        // Send notification
-        await notifyQuestCompleted(
-          session.userId,
-          quest.title,
-          quest.xpReward,
-          levelResult.newLevel,
-          levelResult.oldLevel
-        );
-
         if (levelResult.leveledUp) {
-          await notifyLevelUp(session.userId, levelResult.newLevel, newTotalXp);
         }
       }
 
@@ -182,9 +171,6 @@ export async function PATCH(
               newTotalXp,
             },
           });
-
-        // Send notification
-        await notifyQuestFailed(session.userId, quest.title, penalty);
       }
 
       // Update quest status

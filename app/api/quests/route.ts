@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { quests, questSkills, questCharacters, activityLog } from '@/lib/db/schema';
 import { eq, and } from 'drizzle-orm';
-import { verifySessionToken } from '@/lib/telegram/verify';
+import { verifySessionToken } from '@/lib/auth';
 import { calculateXpReward } from '@/lib/game/xp';
 
 // GET /api/quests - Get all quests for user

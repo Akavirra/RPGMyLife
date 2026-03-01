@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { locations } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
-import { verifySessionToken } from '@/lib/telegram/verify';
+import { verifySessionToken } from '@/lib/auth';
 
 // GET /api/locations - Get all locations
 export async function GET(request: NextRequest) {

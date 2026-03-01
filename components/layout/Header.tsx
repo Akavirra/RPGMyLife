@@ -1,9 +1,10 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { ChevronLeft, Menu } from 'lucide-react';
+import { ChevronLeft, Menu, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 interface HeaderProps {
   title: string;
@@ -21,6 +22,13 @@ export function Header({
   className,
 }: HeaderProps) {
   const router = useRouter();
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+    router.refresh();
+  };
 
   return (
     <header
@@ -51,7 +59,18 @@ export function Header({
         </div>
 
         {/* Right section */}
-        {rightContent && <div className="flex items-center">{rightContent}</div>}
+        <div className="flex items-center gap-2">
+          {user && (
+            <button
+              onClick={handleLogout}
+              className="p-2 text-slate-400 hover:text-amber-400 transition-colors"
+              title="Вийти"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
+          )}
+          {rightContent && <div className="flex items-center">{rightContent}</div>}
+        </div>
       </div>
     </header>
   );

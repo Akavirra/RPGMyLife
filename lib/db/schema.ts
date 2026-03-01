@@ -21,16 +21,18 @@ export const eventTypeEnum = pgEnum('event_type', [
   'skill_up',
 ]);
 
-// Users table - authenticated via Telegram
+// Users table - authenticated via email/password
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
-  telegramId: text('telegram_id').notNull().unique(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
   username: text('username'),
   firstName: text('first_name').notNull(),
   avatarUrl: text('avatar_url'),
   level: integer('level').notNull().default(1),
   totalXp: integer('total_xp').notNull().default(0),
   createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
 // Skills table - character skill tree
