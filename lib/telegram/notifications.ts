@@ -1,3 +1,4 @@
+import 'server-only';
 import { db } from '../db';
 import { users, quests } from '../db/schema';
 import { eq } from 'drizzle-orm';

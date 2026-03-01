@@ -1,5 +1,13 @@
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import { getBot } from '@/lib/telegram/bot';
+import { bot, getBot, setupBot } from '@/lib/telegram/bot';
+
+// Singleton pattern to ensure setupBot is called only once
+let isSetup = false;
+if (!isSetup && bot) {
+  setupBot();
+  isSetup = true;
+}
 
 // POST /api/bot - Telegram webhook handler
 export async function POST(request: NextRequest) {

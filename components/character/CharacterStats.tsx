@@ -1,15 +1,16 @@
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { ProgressBar, XpProgress } from '@/components/ui/ProgressBar';
 import { Badge } from '@/components/ui/Badge';
 import { getLevelTitle, getXpForNextLevel } from '@/lib/game/level';
-import { cn } from '@/lib/utils';
 import { User, Zap, Trophy, Target } from 'lucide-react';
 
 interface UserData {
   id: number;
   firstName: string;
-  username: string | null;
-  avatarUrl: string | null;
+  username?: string | null;
+  avatarUrl?: string | null;
   level: number;
   totalXp: number;
 }
@@ -17,10 +18,8 @@ interface UserData {
 interface SkillData {
   id: number;
   name: string;
-  description: string | null;
-  xp: number;
   level: number;
-  iconUrl: string | null;
+  xp: number;
 }
 
 interface CharacterStatsProps {

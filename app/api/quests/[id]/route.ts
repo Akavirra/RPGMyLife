@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 import { quests, users, questSkills, activityLog } from '@/lib/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { verifySessionToken } from '@/lib/telegram/verify';
-import { checkLevelUp, checkSkillLevelUp } from '@/lib/game/level';
+import { checkLevelUp, checkSkillLevelUp } from '@/lib/game/level-server';
 import { calculateXpReward, calculateFailurePenalty } from '@/lib/game/xp';
 import { notifyQuestCompleted, notifyQuestFailed, notifyLevelUp } from '@/lib/telegram/notifications';
 

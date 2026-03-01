@@ -1,3 +1,4 @@
+import 'server-only';
 import { Bot, Keyboard, InlineKeyboard } from 'grammy';
 import { db } from '../db';
 import { quests, users } from '../db/schema';

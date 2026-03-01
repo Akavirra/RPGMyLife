@@ -1,3 +1,4 @@
+import 'server-only';
 import { SignJWT, jwtVerify } from 'jose';
 import { db } from '../db';
 import { users } from '../db/schema';

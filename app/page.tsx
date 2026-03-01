@@ -1,6 +1,8 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import { cookies } from 'next/headers';
+import { db } from '@/lib/db';
+import { users, skills, quests } from '@/lib/db/schema';
+import { verifySessionToken } from '@/lib/telegram/verify';
+import { eq } from 'drizzle-orm';
 import { Header } from '@/components/layout/Header';
 import { CharacterStats } from '@/components/character/CharacterStats';
 import { QuestCard } from '@/components/quest/QuestCard';
@@ -18,63 +20,65 @@ interface UserData {
   totalXp: number;
 }
 
-interface QuestData {
+interface SkillData {
   id: number;
-  title: string;
-  description: string | null;
-  status: string;
-  type: string;
-  difficulty: number;
-  xpReward: number;
-  deadline: string | null;
-  createdAt: string;
+  name: string;
+  level: number;
+  xp: number;
 }
 
-export default function HomePage() {
-  const [user, setUser] = useState<UserData | null>(null);
-  const [quests, setQuests] = useState<QuestData[]>([]);
-  const [loading, setLoading] = useState(true);
+export default async function HomePage() {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get('session');
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  let userData: UserData | null = null;
+  let skillData: SkillData[] = [];
+  let activeQuests: any[] = [];
+  let completedQuestsCount = 0;
 
-  const fetchData = async () => {
-    try {
-      // Fetch user data
-      const userRes = await fetch('/api/auth/telegram', {
-        credentials: 'include',
+  if (sessionToken?.value) {
+    const session = await verifySessionToken(sessionToken.value);
+    if (session) {
+      // Fetch user from database
+      const dbUser = await db.query.users.findFirst({
+        where: eq(users.id, session.userId),
       });
-      if (userRes.ok) {
-        const userData = await userRes.json();
-        setUser(userData.user);
-      }
 
-      // Fetch quests
-      const questsRes = await fetch('/api/quests?status=active', {
-        credentials: 'include',
-      });
-      if (questsRes.ok) {
-        const questsData = await questsRes.json();
-        setQuests(questsData.quests || []);
+      if (dbUser) {
+        userData = {
+          id: dbUser.id,
+          firstName: dbUser.firstName,
+          username: dbUser.username,
+          avatarUrl: dbUser.avatarUrl,
+          level: dbUser.level,
+          totalXp: dbUser.totalXp,
+        };
+
+        // Fetch user skills
+        const dbSkills = await db.query.skills.findMany({
+          where: eq(skills.userId, session.userId),
+        });
+
+        skillData = dbSkills.map(s => ({
+          id: s.id,
+          name: s.name,
+          level: s.level,
+          xp: s.xp,
+        }));
+
+        // Fetch user quests
+        const dbQuests = await db.query.quests.findMany({
+          where: eq(quests.userId, session.userId),
+        });
+
+        activeQuests = dbQuests.filter(q => q.status === 'active');
+        completedQuestsCount = dbQuests.filter(q => q.status === 'completed').length;
       }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
     }
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
-      </div>
-    );
   }
 
   // If not logged in, show welcome screen
-  if (!user) {
+  if (!userData) {
     return (
       <div className="min-h-screen bg-slate-950">
         <Header title="Life RPG" />
@@ -105,9 +109,6 @@ export default function HomePage() {
     );
   }
 
-  const activeQuests = quests.filter(q => q.status === 'active');
-  const completedQuestsCount = quests.filter(q => q.status === 'completed').length;
-
   return (
     <div className="min-h-screen bg-slate-950">
       <Header title="Life RPG" />
@@ -115,7 +116,8 @@ export default function HomePage() {
       <main className="p-4 space-y-6">
         {/* Character Stats */}
         <CharacterStats
-          user={user}
+          user={userData}
+          skills={skillData}
           activeQuestsCount={activeQuests.length}
           completedQuestsCount={completedQuestsCount}
         />
