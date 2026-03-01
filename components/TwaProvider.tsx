@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import WebApp from '@twa-dev/sdk';
 
 interface TwaProviderProps {
   children: React.ReactNode;
@@ -8,6 +9,7 @@ interface TwaProviderProps {
 
 export function TwaProvider({ children }: TwaProviderProps) {
   const [mounted, setMounted] = useState(false);
+  const [isTelegram, setIsTelegram] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -20,6 +22,7 @@ export function TwaProvider({ children }: TwaProviderProps) {
         
         // Initialize the WebApp
         WebApp.ready();
+        setIsTelegram(true);
         
         // Get initData for authentication
         const initData = WebApp.initData;
@@ -66,5 +69,36 @@ export function TwaProvider({ children }: TwaProviderProps) {
     return null;
   }
 
-  return <>{children}</>;
+  // Expose Telegram state to children
+  return (
+    <div data-telegram={isTelegram}>
+      {children}
+    </div>
+  );
+}
+
+// Helper function to initiate Telegram login from website
+export function loginWithTelegram() {
+  try {
+    const WebApp = (window as any).Telegram?.WebApp;
+    if (WebApp) {
+      WebApp.expand();
+      WebApp.ready();
+      
+      const initData = WebApp.initData;
+      if (initData) {
+        fetch('/api/auth/telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ initData }),
+        }).then(() => window.location.reload());
+      }
+    } else {
+      // Open Telegram bot for login
+      window.open('https://t.me/rpgmylife_bot?start=login', '_blank');
+    }
+  } catch (error) {
+    // Open Telegram bot for login
+    window.open('https://t.me/rpgmylife_bot?start=login', '_blank');
+  }
 }
