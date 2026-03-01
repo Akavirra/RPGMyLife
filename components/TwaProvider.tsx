@@ -12,7 +12,7 @@ export function TwaProvider({ children }: TwaProviderProps) {
   useEffect(() => {
     setMounted(true);
     
-    // Initialize Telegram WebApp
+    // Initialize Telegram WebApp and authenticate
     const initTwa = async () => {
       try {
         // Dynamic import for @twa-dev/sdk
@@ -20,6 +20,24 @@ export function TwaProvider({ children }: TwaProviderProps) {
         
         // Initialize the WebApp
         WebApp.ready();
+        
+        // Get initData for authentication
+        const initData = WebApp.initData;
+        
+        if (initData) {
+          // Send initData to server for authentication
+          const response = await fetch('/api/auth/telegram', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ initData }),
+          });
+          
+          if (response.ok) {
+            console.log('Authenticated via Telegram');
+            // Reload to get authenticated session
+            window.location.reload();
+          }
+        }
         
         // Expand to fullscreen
         WebApp.expand();
