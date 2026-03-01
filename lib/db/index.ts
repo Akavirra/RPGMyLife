@@ -14,7 +14,7 @@ if (!databaseUrl) {
 }
 
 // Create Neon HTTP client with fullResults: false as specified
-const sql = neon(databaseUrl, { fullResults: false });
+const sql = neon(databaseUrl, { fullResults: true });
 
 // Create Drizzle instance
 export const db = drizzle(sql, { schema });
