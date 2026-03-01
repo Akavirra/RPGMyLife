@@ -10,7 +10,7 @@ import { notifyQuestCompleted, notifyQuestFailed, notifyLevelUp } from '@/lib/te
 // GET /api/quests/[id] - Get single quest
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const sessionToken = request.cookies.get('session')?.value;
@@ -23,7 +23,8 @@ export async function GET(
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
-    const questId = parseInt(params.id);
+    const { id } = await params;
+    const questId = parseInt(id);
     if (isNaN(questId)) {
       return NextResponse.json({ error: 'Invalid quest ID' }, { status: 400 });
     }
@@ -49,7 +50,7 @@ export async function GET(
 // PATCH /api/quests/[id] - Update quest (including complete/fail)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const sessionToken = request.cookies.get('session')?.value;
@@ -62,7 +63,8 @@ export async function PATCH(
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
-    const questId = parseInt(params.id);
+    const { id } = await params;
+    const questId = parseInt(id);
     if (isNaN(questId)) {
       return NextResponse.json({ error: 'Invalid quest ID' }, { status: 400 });
     }
@@ -226,7 +228,7 @@ export async function PATCH(
 // DELETE /api/quests/[id] - Delete quest
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const sessionToken = request.cookies.get('session')?.value;
@@ -239,7 +241,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
-    const questId = parseInt(params.id);
+    const { id } = await params;
+    const questId = parseInt(id);
     if (isNaN(questId)) {
       return NextResponse.json({ error: 'Invalid quest ID' }, { status: 400 });
     }
