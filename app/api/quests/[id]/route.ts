@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { quests, users, questSkills, activityLog } from '@/lib/db/schema';
+import { quests, users, questSkills, activityLog, skills } from '@/lib/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { verifySessionToken } from '@/lib/telegram/verify';
 import { checkLevelUp, checkSkillLevelUp } from '@/lib/game/level-server';
@@ -103,7 +103,7 @@ export async function PATCH(
 
         for (const link of linkedSkills) {
           const skill = await db.query.skills.findFirst({
-            where: eq((tbl) => tbl.id, link.skillId),
+            where: eq(skills.id, link.skillId),
           });
 
           if (skill) {
