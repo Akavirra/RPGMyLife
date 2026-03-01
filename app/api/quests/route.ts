@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
     const xpReward = calculateXpReward(difficulty || 1, type || 'once');
 
     // Create quest
-    const [newQuest] = await db.insert(quests)
+    const result = await db.insert(quests)
       .values({
         userId: session.userId,
         title,
@@ -102,6 +102,8 @@ export async function POST(request: NextRequest) {
         parentQuestId: parentQuestId || null,
       })
       .returning();
+
+    const newQuest = result[0];
 
     // Add linked characters
     if (characterIds && characterIds.length > 0) {

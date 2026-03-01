@@ -194,10 +194,7 @@ export function setupBot() {
     if (text === 'Відкрити квести 📋') {
       await ctx.reply('Відкрий додаток: https://your-app.vercel.app/quests');
     } else if (text === 'Моя статистика 📊') {
-      ctx.api.callApi('sendMessage', {
-        chat_id: ctx.from!.id,
-        text: 'Натисни /stats для перегляду статистики',
-      });
+      await ctx.reply('Натисни /stats для перегляду статистики');
     } else if (text === 'Допомога ℹ️') {
       await ctx.reply('Натисни /help для перегляду допомоги');
     }

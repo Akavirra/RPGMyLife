@@ -5,13 +5,13 @@ import { BottomNav } from '@/components/layout/BottomNav';
 import './globals.css';
 
 const cinzel = Cinzel({
-  subsets: ['latin', 'cyrillic'],
+  subsets: ['latin'],
   variable: '--font-cinzel',
   display: 'swap',
 });
 
 const raleway = Raleway({
-  subsets: ['latin', 'cyrillic'],
+  subsets: ['latin'],
   variable: '--font-raleway',
   display: 'swap',
 });

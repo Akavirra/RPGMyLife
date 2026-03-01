@@ -1,7 +1,7 @@
 import 'server-only';
 import { db } from '../db';
 import { users, quests } from '../db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { getBot } from './bot';
 
 /**
@@ -156,7 +156,7 @@ export async function notifyDailyQuestsReset(userId: number): Promise<boolean> {
  * Broadcast message to all users (admin function)
  */
 export async function broadcastToAllUsers(message: string): Promise<number> {
-  const allUsers = await db.query.users.findMany({});
+  const allUsers = await db.select().from(users);
 
   let successCount = 0;
   for (const user of allUsers) {

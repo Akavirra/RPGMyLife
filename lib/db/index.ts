@@ -13,8 +13,8 @@ if (!databaseUrl) {
   throw new Error('DATABASE_URL environment variable is not set. Please add it to your .env.local file.');
 }
 
-// Create Neon HTTP client with fullResults: false as specified
-const sql = neon(databaseUrl, { fullResults: true });
+// Create Neon HTTP client
+const sql = neon(databaseUrl);
 
 // Create Drizzle instance
 export const db = drizzle(sql, { schema });
