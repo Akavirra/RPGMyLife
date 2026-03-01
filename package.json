@@ -11,7 +11,8 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "bot:setup": "tsx scripts/setup-telegram-webhook.ts"
   },
   "dependencies": {
     "@grammyjs/types": "^3.8.0",
@@ -44,6 +45,7 @@
     "eslint-config-next": "14.1.0",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.3.3"
   }
 }
