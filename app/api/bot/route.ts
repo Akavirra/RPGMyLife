@@ -1,15 +1,13 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import { bot, getBot, setupBot } from '@/lib/telegram/bot';
-
-// Setup bot on module load (will run during build and server start)
-if (bot) {
-  setupBot();
-}
+import { getBot, initializeBot } from '@/lib/telegram/bot';
 
 // POST /api/bot - Telegram webhook handler
 export async function POST(request: NextRequest) {
   try {
+    // Initialize bot on first request
+    await initializeBot();
+    
     const body = await request.json();
     
     // Get bot instance

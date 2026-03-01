@@ -6,7 +6,7 @@ import { eq, and, gte } from 'drizzle-orm';
 
 // Initialize Grammy bot
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
-export const bot = botToken ? new Bot(botToken) : null;
+const bot = botToken ? new Bot(botToken) : null;
 
 // Helper to get bot instance safely
 export function getBot() {
@@ -14,6 +14,18 @@ export function getBot() {
     throw new Error('Telegram bot not configured');
   }
   return bot;
+}
+
+// Initialize bot and setup handlers
+export async function initializeBot() {
+  if (!bot) {
+    console.log('Telegram bot not initialized (no token)');
+    return;
+  }
+  
+  await bot.init();
+  setupBot();
+  console.log('Telegram bot initialized successfully');
 }
 
 // Setup bot commands and handlers
