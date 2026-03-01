@@ -1,0 +1,43 @@
+import type { Metadata } from 'next';
+import { Cinzel, Raleway } from 'next/font/google';
+import { TwaProvider } from '@/components/TwaProvider';
+import { BottomNav } from '@/components/layout/BottomNav';
+import './globals.css';
+
+const cinzel = Cinzel({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-cinzel',
+  display: 'swap',
+});
+
+const raleway = Raleway({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-raleway',
+  display: 'swap',
+});
+
+export const metadata: Metadata = {
+  title: 'Life RPG - Твоя пригода починається',
+  description: 'Геймифікація реального життя: створюй квести, розвивай навички, досягай цілей',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+  themeColor: '#0f172a',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="uk" className={`${cinzel.variable} ${raleway.variable}`}>
+      <body className="font-sans bg-slate-950 text-slate-100 min-h-screen antialiased">
+        <TwaProvider>
+          <div className="pb-20">
+            {children}
+          </div>
+          <BottomNav />
+        </TwaProvider>
+      </body>
+    </html>
+  );
+}

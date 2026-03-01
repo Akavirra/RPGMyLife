@@ -1,0 +1,58 @@
+'use client';
+
+import { cn } from '@/lib/utils';
+import { ChevronLeft, Menu } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+interface HeaderProps {
+  title: string;
+  showBack?: boolean;
+  showMenu?: boolean;
+  rightContent?: React.ReactNode;
+  className?: string;
+}
+
+export function Header({
+  title,
+  showBack = false,
+  showMenu = false,
+  rightContent,
+  className,
+}: HeaderProps) {
+  const router = useRouter();
+
+  return (
+    <header
+      className={cn(
+        'sticky top-0 z-40 bg-slate-950/95 backdrop-blur-lg border-b border-amber-700/30',
+        className
+      )}
+    >
+      <div className="flex items-center justify-between h-14 px-4">
+        {/* Left section */}
+        <div className="flex items-center gap-2">
+          {showBack && (
+            <button
+              onClick={() => router.back()}
+              className="p-2 -ml-2 text-slate-400 hover:text-amber-400 transition-colors"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
+          {showMenu && (
+            <button className="p-2 -ml-2 text-slate-400 hover:text-amber-400 transition-colors">
+              <Menu className="w-6 h-6" />
+            </button>
+          )}
+          <h1 className="text-xl font-bold text-amber-400 font-cinzel">
+            {title}
+          </h1>
+        </div>
+
+        {/* Right section */}
+        {rightContent && <div className="flex items-center">{rightContent}</div>}
+      </div>
+    </header>
+  );
+}

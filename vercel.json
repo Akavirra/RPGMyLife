@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/quests/check-deadlines",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
