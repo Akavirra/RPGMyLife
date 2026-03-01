@@ -2,31 +2,21 @@ import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { bot, getBot, setupBot } from '@/lib/telegram/bot';
 
-// Singleton pattern to ensure setupBot is called only once
-let isSetup = false;
-if (!isSetup && bot) {
+// Setup bot on module load (will run during build and server start)
+if (bot) {
   setupBot();
-  isSetup = true;
 }
 
 // POST /api/bot - Telegram webhook handler
 export async function POST(request: NextRequest) {
   try {
-    // Skip secret token verification for now (can be enabled later)
-    // const secretToken = request.headers.get('X-Telegram-Bot-Api-Secret-Token');
-    // const expectedSecret = process.env.TELEGRAM_BOT_SECRET;
-    // if (expectedSecret && secretToken !== expectedSecret) {
-    //   console.error('Invalid Telegram secret token');
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
-
     const body = await request.json();
     
-    // Initialize bot if not already running
-    const bot = getBot();
+    // Get bot instance
+    const botInstance = getBot();
     
     // Handle the update
-    await bot.handleUpdate(body);
+    await botInstance.handleUpdate(body);
 
     return NextResponse.json({ ok: true });
   } catch (error) {
