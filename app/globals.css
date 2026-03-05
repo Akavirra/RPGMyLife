@@ -4,16 +4,30 @@
 
 @layer base {
   :root {
-    --font-cinzel: 'Cinzel', serif;
-    --font-raleway: 'Raleway', sans-serif;
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     
-    /* Colors */
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
+    /* Light theme colors */
+    --bg-primary: #FAFBFC;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #F4F5F7;
+    
+    /* Accent colors - pastel */
+    --accent-blue: #5B8DEF;
+    --accent-green: #34A853;
+    --accent-purple: #A78BFA;
+    
+    /* Text colors */
+    --text-primary: #1F2937;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    
+    /* Border */
+    --border-default: #E5E7EB;
+    --border-light: #F3F4F6;
+    
+    /* Legacy gold for backwards compatibility */
     --accent-gold: #c9a84c;
-    --accent-amber: #f59e0b;
   }
 
   * {
@@ -27,9 +41,10 @@
   }
 
   body {
-    background: linear-gradient(to bottom, #0f172a, #1e293b);
+    background: linear-gradient(to bottom, #FAFBFC, #F4F5F7);
     min-height: 100vh;
-    font-family: var(--font-raleway), sans-serif;
+    font-family: var(--font-sans);
+    color: var(--text-primary);
   }
 
   /* Custom scrollbar */
@@ -39,66 +54,177 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #1e293b;
+    background: #F3F4F6;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #475569;
+    background: #D1D5DB;
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #64748b;
+    background: #9CA3AF;
+  }
+
+  /* Focus visible styles */
+  :focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
   }
 }
 
 @layer components {
-  .font-cinzel {
-    font-family: var(--font-cinzel), serif;
+  /* Typography classes */
+  .font-display {
+    @apply text-display;
+  }
+  
+  .font-h1 {
+    @apply text-h1;
+  }
+  
+  .font-h2 {
+    @apply text-h2;
+  }
+  
+  .font-h3 {
+    @apply text-h3;
+  }
+  
+  .font-body {
+    @apply text-body;
+  }
+  
+  .font-small {
+    @apply text-small;
   }
 
-  /* Skyrim-style card */
-  .card-skyrim {
-    @apply bg-slate-900/80 backdrop-blur-sm border border-amber-700/30 rounded-xl;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  /* Notion-style card */
+  .card-notion {
+    @apply bg-white rounded-notion shadow-notion transition-all duration-200;
   }
 
-  /* Gold button glow */
-  .btn-gold {
-    @apply bg-gradient-to-r from-amber-600 to-amber-500 text-slate-900 font-semibold;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  .card-notion:hover {
+    @apply shadow-notion-md;
   }
 
-  .btn-gold:hover {
-    @apply from-amber-500 to-amber-400;
-    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  /* Glass effect for modern components */
+  .glass {
+    @apply bg-white/80 backdrop-blur-md border border-white/20;
   }
 
-  /* XP bar glow */
-  .xp-bar {
-    @apply bg-gradient-to-r from-amber-500 to-yellow-400;
-    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  /* Input styles */
+  .input-notion {
+    @apply w-full px-3 py-2 bg-white border border-border rounded-notion text-text-primary 
+           placeholder:text-text-muted
+           focus:outline-none focus:ring-2 focus:ring-accent-blue/20 focus:border-accent-blue
+           transition-all duration-200;
   }
 
-  /* Skill bar glow */
-  .skill-bar {
-    @apply bg-gradient-to-r from-purple-500 to-pink-400;
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-4 py-2 bg-accent-blue text-white 
+           font-medium rounded-notion
+           hover:bg-opacity-90 active:scale-[0.98]
+           transition-all duration-200 ease-notion
+           focus:outline-none focus:ring-2 focus:ring-accent-blue/30;
   }
 
-  /* Fade in animation */
-  .fade-in {
-    animation: fadeIn 0.3s ease-in;
+  /* Secondary button */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-4 py-2 bg-background-tertiary text-text-primary 
+           font-medium rounded-notion border border-border
+           hover:bg-gray-200 active:scale-[0.98]
+           transition-all duration-200 ease-notion
+           focus:outline-none focus:ring-2 focus:ring-gray-300;
+  }
+
+  /* Outline button */
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-4 py-2 bg-transparent text-accent-blue 
+           font-medium rounded-notion border border-accent-blue/30
+           hover:bg-accent-blue/5 active:scale-[0.98]
+           transition-all duration-200 ease-notion
+           focus:outline-none focus:ring-2 focus:ring-accent-blue/20;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-4 py-2 bg-transparent text-text-secondary 
+           font-medium rounded-notion
+           hover:bg-background-tertiary hover:text-text-primary active:scale-[0.98]
+           transition-all duration-200 ease-notion;
+  }
+
+  /* Destructive button */
+  .btn-destructive {
+    @apply inline-flex items-center justify-center px-4 py-2 bg-red-500 text-white 
+           font-medium rounded-notion
+           hover:bg-red-600 active:scale-[0.98]
+           transition-all duration-200 ease-notion
+           focus:outline-none focus:ring-2 focus:ring-red-500/30;
+  }
+
+  /* Success button */
+  .btn-success {
+    @apply inline-flex items-center justify-center px-4 py-2 bg-accent-green text-white 
+           font-medium rounded-notion
+           hover:bg-opacity-90 active:scale-[0.98]
+           transition-all duration-200 ease-notion
+           focus:outline-none focus:ring-2 focus:ring-accent-green/30;
+  }
+
+  /* Progress bar styles */
+  .progress-default {
+    @apply h-2 w-full bg-background-tertiary rounded-full overflow-hidden;
+  }
+
+  .progress-bar {
+    @apply h-full rounded-full transition-all duration-500 ease-notion;
+  }
+
+  .progress-xp {
+    @apply bg-gradient-to-r from-accent-blue to-accent-purple;
+  }
+
+  .progress-skill {
+    @apply bg-gradient-to-r from-accent-green to-emerald-400;
+  }
+
+  .progress-health {
+    @apply bg-gradient-to-r from-red-400 to-red-500;
+  }
+
+  /* Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
     }
     to {
       opacity: 1;
@@ -106,21 +232,60 @@
     }
   }
 
-  /* Level up flash animation */
-  .level-up-flash {
-    animation: levelUpFlash 0.5s ease-out;
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
-  @keyframes levelUpFlash {
-    0% {
-      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-8px);
     }
-    70% {
-      box-shadow: 0 0 0 20px rgba(245, 158, 11, 0);
+    to {
+      opacity: 1;
+      transform: translateX(0);
     }
-    100% {
-      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
-    }
+  }
+
+  /* Modal backdrop */
+  .modal-backdrop {
+    @apply fixed inset-0 bg-black/40 backdrop-blur-sm z-50;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-default {
+    @apply bg-background-tertiary text-text-secondary;
+  }
+
+  .badge-success {
+    @apply bg-accent-green/10 text-accent-green border border-accent-green/20;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-700 border border-yellow-200;
+  }
+
+  .badge-danger {
+    @apply bg-red-100 text-red-600 border border-red-200;
+  }
+
+  .badge-info {
+    @apply bg-accent-blue/10 text-accent-blue border border-accent-blue/20;
+  }
+
+  .badge-purple {
+    @apply bg-accent-purple/10 text-accent-purple border border-accent-purple/20;
   }
 }
 
@@ -134,25 +299,6 @@
     padding-top: env(safe-area-inset-top);
   }
 
-  /* Text gradient */
-  .text-gradient-gold {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(to right, #c9a84c, #f59e0b, #c9a84c);
-  }
-
-  /* Noise texture overlay */
-  .noise-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  }
-
   /* Hide scrollbar but keep functionality */
   .scrollbar-hide {
     -ms-overflow-style: none;
@@ -161,5 +307,42 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Text colors */
+  .text-primary {
+    color: var(--text-primary);
+  }
+
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+
+  .text-muted {
+    color: var(--text-muted);
+  }
+
+  /* Background colors */
+  .bg-primary {
+    background-color: var(--bg-primary);
+  }
+
+  .bg-secondary {
+    background-color: var(--bg-secondary);
+  }
+
+  .bg-tertiary {
+    background-color: var(--bg-tertiary);
   }
 }

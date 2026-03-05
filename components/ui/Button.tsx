@@ -2,16 +2,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 disabled:pointer-events-none disabled:opacity-50 active:scale-95',
+  'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-200 ease-notion focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue/30 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
   {
     variants: {
       variant: {
-        default: 'bg-gradient-to-r from-amber-600 to-amber-500 text-slate-900 shadow-lg shadow-amber-500/20 hover:from-amber-500 hover:to-amber-400 hover:scale-105',
-        secondary: 'bg-slate-700/80 text-slate-100 border border-amber-700/30 hover:bg-slate-600/80',
-        outline: 'border-2 border-amber-600/50 text-amber-500 hover:bg-amber-600/10',
-        ghost: 'text-slate-300 hover:bg-slate-800/50 hover:text-amber-400',
-        destructive: 'bg-red-600/80 text-white hover:bg-red-600',
-        success: 'bg-green-600/80 text-white hover:bg-green-600',
+        primary: 'bg-accent-blue text-white hover:bg-opacity-90 shadow-sm',
+        secondary: 'bg-background-tertiary text-text-primary border border-border hover:bg-gray-200',
+        outline: 'border border-accent-blue/30 text-accent-blue hover:bg-accent-blue/5',
+        ghost: 'text-text-secondary hover:bg-background-tertiary hover:text-text-primary',
+        destructive: 'bg-red-500 text-white hover:bg-red-600',
+        success: 'bg-accent-green text-white hover:bg-opacity-90',
       },
       size: {
         default: 'h-10 px-4 py-2',
@@ -22,7 +22,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: 'default',
+      variant: 'primary',
       size: 'default',
     },
   }

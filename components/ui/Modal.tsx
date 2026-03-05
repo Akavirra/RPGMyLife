@@ -66,36 +66,36 @@ export function Modal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+      {/* Animated Backdrop */}
       <div
-        className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       />
 
       {/* Modal */}
       <div
         className={cn(
-          'relative w-full bg-slate-900 border border-amber-700/30 rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200',
+          'relative w-full bg-white rounded-lg shadow-notion-lg animate-scale-in',
           sizeStyles[size],
           className
         )}
       >
         {/* Header */}
         {(title || description) && (
-          <div className="flex items-start justify-between p-6 border-b border-slate-700/30">
+          <div className="flex items-start justify-between px-6 py-4 border-b border-border-light">
             <div>
               {title && (
-                <h2 className="text-xl font-semibold text-amber-400 font-cinzel">
+                <h2 className="text-lg font-semibold text-text-primary">
                   {title}
                 </h2>
               )}
               {description && (
-                <p className="mt-1 text-sm text-slate-400">{description}</p>
+                <p className="mt-1 text-sm text-text-secondary">{description}</p>
               )}
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-amber-400 hover:bg-slate-800/50 rounded-lg transition-colors"
+              className="p-1.5 text-text-muted hover:text-text-primary hover:bg-background-tertiary rounded-lg transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -132,18 +132,18 @@ export function ConfirmDialog({
   variant = 'default',
 }: ConfirmDialogProps) {
   const confirmButtonStyles = {
-    danger: 'bg-red-600 hover:bg-red-500',
-    warning: 'bg-yellow-600 hover:bg-yellow-500',
-    default: 'bg-amber-600 hover:bg-amber-500',
+    danger: 'bg-red-500 hover:bg-red-600 text-white',
+    warning: 'bg-yellow-500 hover:bg-yellow-600 text-white',
+    default: 'bg-accent-blue hover:bg-accent-blue/90 text-white',
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
-      <p className="text-slate-300 mb-6">{message}</p>
+      <p className="text-text-secondary mb-6">{message}</p>
       <div className="flex gap-3 justify-end">
         <button
           onClick={onClose}
-          className="px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+          className="px-4 py-2 text-text-secondary hover:text-text-primary hover:bg-background-tertiary rounded-lg transition-colors"
         >
           {cancelText}
         </button>
@@ -153,7 +153,7 @@ export function ConfirmDialog({
             onClose();
           }}
           className={cn(
-            'px-4 py-2 text-white rounded-lg transition-colors',
+            'px-4 py-2 rounded-lg transition-colors font-medium',
             confirmButtonStyles[variant]
           )}
         >

@@ -8,10 +8,10 @@ interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const variantStyles: Record<string, string> = {
-  default: 'bg-slate-700',
-  xp: 'bg-gradient-to-r from-amber-500 to-yellow-400 shadow-lg shadow-amber-500/30',
-  skill: 'bg-gradient-to-r from-purple-500 to-pink-400 shadow-lg shadow-purple-500/30',
-  health: 'bg-gradient-to-r from-green-500 to-emerald-400 shadow-lg shadow-green-500/30',
+  default: 'bg-gray-300',
+  xp: 'bg-gradient-to-r from-accent-blue to-accent-purple',
+  skill: 'bg-gradient-to-r from-accent-green to-emerald-400',
+  health: 'bg-gradient-to-r from-red-400 to-red-500',
 };
 
 export function ProgressBar({
@@ -26,17 +26,17 @@ export function ProgressBar({
 
   return (
     <div className={cn('w-full', className)} {...props}>
-      <div className="h-3 w-full bg-slate-800 rounded-full overflow-hidden border border-slate-700/50">
+      <div className="h-2 w-full bg-background-tertiary rounded-full overflow-hidden">
         <div
           className={cn(
-            'h-full rounded-full transition-all duration-500 ease-out',
+            'h-full rounded-full transition-all duration-500 ease-notion',
             variantStyles[variant]
           )}
           style={{ width: `${percentage}%` }}
         />
       </div>
       {showLabel && (
-        <div className="mt-1 text-xs text-slate-400 flex justify-between">
+        <div className="mt-1 text-xs text-text-secondary flex justify-between">
           <span>{value}</span>
           <span>{max}</span>
         </div>
@@ -60,8 +60,8 @@ export function XpProgress({ currentXp, nextLevelXp, level }: XpProgressProps) {
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center text-sm">
-        <span className="text-amber-400 font-medium">Рівень {level}</span>
-        <span className="text-slate-400">
+        <span className="text-accent-blue font-medium">Рівень {level}</span>
+        <span className="text-text-secondary">
           {xpProgress} / {xpNeeded} XP
         </span>
       </div>

@@ -11,15 +11,15 @@ export function Card({
   ...props
 }: CardProps) {
   const variantStyles = {
-    default: 'bg-slate-800/80 border border-slate-700/50',
-    glass: 'bg-slate-900/60 backdrop-blur-sm border border-amber-700/30',
-    bordered: 'bg-transparent border-2 border-amber-700/40',
+    default: 'bg-white border border-border-light shadow-notion hover:shadow-notion-md',
+    glass: 'bg-white/80 backdrop-blur-md border border-white/20 shadow-notion',
+    bordered: 'bg-transparent border-2 border-border',
   };
 
   return (
     <div
       className={cn(
-        'rounded-xl shadow-lg transition-all duration-300',
+        'rounded-lg transition-all duration-200 ease-notion',
         variantStyles[variant],
         className
       )}
@@ -37,7 +37,7 @@ export function CardHeader({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('px-6 py-4 border-b border-slate-700/30', className)}
+      className={cn('px-5 py-4 border-b border-border-light', className)}
       {...props}
     >
       {children}
@@ -52,7 +52,7 @@ export function CardTitle({
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn('text-lg font-semibold text-amber-400 font-cinzel', className)}
+      className={cn('text-lg font-semibold text-text-primary', className)}
       {...props}
     >
       {children}
@@ -67,7 +67,7 @@ export function CardDescription({
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn('text-sm text-slate-400', className)}
+      className={cn('text-sm text-text-secondary mt-1', className)}
       {...props}
     >
       {children}
@@ -81,7 +81,7 @@ export function CardContent({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn('px-6 py-4', className)} {...props}>
+    <div className={cn('px-5 py-4', className)} {...props}>
       {children}
     </div>
   );
@@ -94,7 +94,7 @@ export function CardFooter({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('px-6 py-4 border-t border-slate-700/30 flex items-center gap-2', className)}
+      className={cn('px-5 py-4 border-t border-border-light flex items-center gap-2', className)}
       {...props}
     >
       {children}

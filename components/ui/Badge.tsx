@@ -1,18 +1,19 @@
 import { cn } from '@/lib/utils';
 
-type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'outline';
+type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'purple' | 'outline';
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  default: 'bg-slate-600/80 text-slate-200',
-  success: 'bg-green-600/20 text-green-400 border border-green-600/30',
-  warning: 'bg-yellow-600/20 text-yellow-400 border border-yellow-600/30',
-  danger: 'bg-red-600/20 text-red-400 border border-red-600/30',
-  info: 'bg-blue-600/20 text-blue-400 border border-blue-600/30',
-  outline: 'border border-slate-600 text-slate-400',
+  default: 'bg-background-tertiary text-text-secondary',
+  success: 'bg-accent-green/10 text-accent-green border border-accent-green/20',
+  warning: 'bg-yellow-100 text-yellow-700 border border-yellow-200',
+  danger: 'bg-red-100 text-red-600 border border-red-200',
+  info: 'bg-accent-blue/10 text-accent-blue border border-accent-blue/20',
+  purple: 'bg-accent-purple/10 text-accent-purple border border-accent-purple/20',
+  outline: 'border border-border text-text-secondary',
 };
 
 export function Badge({
