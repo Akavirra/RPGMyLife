@@ -5,7 +5,7 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { Button } from '@/components/ui/Button';
 import { getDifficultyLabel, getQuestTypeLabel } from '@/lib/game/xp';
 import { formatDate, getTimeRemaining, cn } from '@/lib/utils';
-import { Calendar, Clock, Star, MapPin, Users } from 'lucide-react';
+import { Calendar, Clock, Star, MapPin, Users, Zap, CheckCircle, XCircle } from 'lucide-react';
 import type { Quest, Location, Character } from '@/lib/db/schema';
 
 interface QuestCardProps {
@@ -34,8 +34,15 @@ export function QuestCard({
     failed: 'Провалено',
   };
 
+  const statusColors: Record<string, string> = {
+    draft: 'outline',
+    active: 'info',
+    completed: 'success',
+    failed: 'danger',
+  };
+
   return (
-    <Card className="hover:shadow-notion-md transition-all duration-200">
+    <Card hover className={quest.status === 'completed' ? 'opacity-75' : ''}>
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -45,12 +52,14 @@ export function QuestCard({
             </p>
           </div>
           <div className="flex flex-col items-end gap-2 ml-4">
-            <Badge variant={getStatusBadgeVariant(quest.status)}>
+            <Badge variant={statusColors[quest.status] as any}>
               {statusLabels[quest.status]}
             </Badge>
-            <span className="text-accent-blue text-sm font-medium">
-              {difficultyEmojis[quest.difficulty]}
-            </span>
+            <div className="flex items-center gap-1">
+              {difficultyEmojis[quest.difficulty].split('').map((emoji, i) => (
+                <span key={i} className="text-sm">{emoji}</span>
+              ))}
+            </div>
           </div>
         </div>
       </CardHeader>
@@ -60,14 +69,14 @@ export function QuestCard({
         <div className="flex flex-wrap gap-3 text-sm text-text-secondary">
           {/* Quest type */}
           <span className="flex items-center gap-1">
-            <Star className="w-4 h-4" />
+            <Star className="w-4 h-4 text-accent-purple" />
             {getQuestTypeLabel(quest.type)}
           </span>
 
           {/* Location */}
           {location && (
             <span className="flex items-center gap-1">
-              <MapPin className="w-4 h-4" />
+              <MapPin className="w-4 h-4 text-accent-blue" />
               {location.name}
             </span>
           )}
@@ -75,7 +84,7 @@ export function QuestCard({
           {/* Characters */}
           {characters.length > 0 && (
             <span className="flex items-center gap-1">
-              <Users className="w-4 h-4" />
+              <Users className="w-4 h-4 text-accent-green" />
               {characters.length}
             </span>
           )}
@@ -89,16 +98,20 @@ export function QuestCard({
           )}
         </div>
 
-        {/* XP Reward */}
+        {/* XP Reward - Enhanced */}
         <div className="flex items-center justify-between text-sm">
           <span className="text-text-secondary">Нагорода:</span>
-          <span className="text-accent-blue font-semibold">+{quest.xpReward} XP</span>
+          <div className="flex items-center gap-2">
+            <Zap className="w-4 h-4 text-accent-blue" />
+            <span className="text-accent-blue font-semibold">+{quest.xpReward} XP</span>
+          </div>
         </div>
 
         {/* Progress bar for active quests with deadline */}
         {quest.status === 'active' && quest.deadline && (
           <div className="mt-2">
-            <div className="text-xs text-text-muted mb-1">
+            <div className="text-xs text-text-muted mb-1 flex items-center gap-1">
+              <Clock className="w-3 h-3" />
               Залишилось: {getTimeRemaining(quest.deadline)}
             </div>
           </div>
@@ -106,7 +119,8 @@ export function QuestCard({
       </CardContent>
 
       <CardFooter className="justify-between">
-        <span className="text-xs text-text-muted">
+        <span className="text-xs text-text-muted flex items-center gap-1">
+          <Calendar className="w-3 h-3" />
           {formatDate(quest.createdAt)}
         </span>
         
@@ -120,6 +134,7 @@ export function QuestCard({
                   onClick={onComplete}
                   disabled={isLoading}
                 >
+                  <CheckCircle className="w-4 h-4 mr-1" />
                   Виконати
                 </Button>
               )}
@@ -130,6 +145,7 @@ export function QuestCard({
                   onClick={onFail}
                   disabled={isLoading}
                 >
+                  <XCircle className="w-4 h-4 mr-1" />
                   Провалено
                 </Button>
               )}

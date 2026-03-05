@@ -101,7 +101,7 @@
 
   /* Notion-style card */
   .card-notion {
-    @apply bg-white rounded-notion shadow-notion transition-all duration-200;
+    @apply bg-white rounded-lg shadow-notion transition-all duration-200;
   }
 
   .card-notion:hover {
@@ -115,16 +115,238 @@
 
   /* Input styles */
   .input-notion {
-    @apply w-full px-3 py-2 bg-white border border-border rounded-notion text-text-primary 
+    @apply w-full px-3 py-2 bg-white border border-border rounded-lg text-text-primary 
            placeholder:text-text-muted
            focus:outline-none focus:ring-2 focus:ring-accent-blue/20 focus:border-accent-blue
            transition-all duration-200;
   }
 
+  /* ========== GAMIFICATION STYLES ========== */
+  
+  /* XP Gain Animation */
+  .xp-gain {
+    animation: xpGain 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes xpGain {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+
+  /* Level Up Pulse */
+  .level-up {
+    animation: levelUpPulse 0.6s ease-out;
+  }
+
+  @keyframes levelUpPulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(91, 141, 239, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 20px rgba(91, 141, 239, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(91, 141, 239, 0);
+    }
+  }
+
+  /* Quest Complete Celebration */
+  .quest-complete {
+    animation: questComplete 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes questComplete {
+    0% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(1.05);
+    }
+    50% {
+      transform: scale(1);
+      filter: brightness(1.2);
+    }
+    75% {
+      transform: scale(1.02);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* Progress Bar Shimmer */
+  .progress-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Achievement Bounce */
+  .achievement-bounce {
+    animation: achievementBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  @keyframes achievementBounce {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* Floating Particles */
+  .particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-20px) rotate(180deg);
+      opacity: 0.5;
+    }
+  }
+
+  /* Skill Level Up Glow */
+  .skill-level-up {
+    animation: skillGlow 1s ease-out;
+  }
+
+  @keyframes skillGlow {
+    0% {
+      box-shadow: 0 0 0 0 rgba(167, 139, 250, 0.6);
+    }
+    50% {
+      box-shadow: 0 0 20px 5px rgba(167, 139, 250, 0.4);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(167, 139, 250, 0);
+    }
+  }
+
+  /* Button Hover Effect */
+  .btn-gamified {
+    @apply relative overflow-hidden;
+  }
+
+  .btn-gamified::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+  }
+
+  .btn-gamified:hover::before {
+    width: 200px;
+    height: 200px;
+  }
+
+  /* Card Hover Lift */
+  .card-hover-lift {
+    @apply transition-all duration-300;
+  }
+
+  .card-hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Badge Pulse */
+  .badge-pulse {
+    animation: badgePulse 2s infinite;
+  }
+
+  @keyframes badgePulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  /* Streak Fire */
+  .streak-fire {
+    animation: fireGlow 0.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes fireGlow {
+    from {
+      filter: brightness(1) drop-shadow(0 0 2px orange);
+    }
+    to {
+      filter: brightness(1.2) drop-shadow(0 0 8px orange);
+    }
+  }
+
+  /* Progress Fill Animation */
+  .progress-fill {
+    animation: progressFill 1s ease-out forwards;
+  }
+
+  @keyframes progressFill {
+    from {
+      width: 0%;
+    }
+  }
+
+  /* ========== BUTTON VARIANTS ========== */
+
   /* Primary button */
   .btn-primary {
     @apply inline-flex items-center justify-center px-4 py-2 bg-accent-blue text-white 
-           font-medium rounded-notion
+           font-medium rounded-lg
            hover:bg-opacity-90 active:scale-[0.98]
            transition-all duration-200 ease-notion
            focus:outline-none focus:ring-2 focus:ring-accent-blue/30;
@@ -133,7 +355,7 @@
   /* Secondary button */
   .btn-secondary {
     @apply inline-flex items-center justify-center px-4 py-2 bg-background-tertiary text-text-primary 
-           font-medium rounded-notion border border-border
+           font-medium rounded-lg border border-border
            hover:bg-gray-200 active:scale-[0.98]
            transition-all duration-200 ease-notion
            focus:outline-none focus:ring-2 focus:ring-gray-300;
@@ -142,7 +364,7 @@
   /* Outline button */
   .btn-outline {
     @apply inline-flex items-center justify-center px-4 py-2 bg-transparent text-accent-blue 
-           font-medium rounded-notion border border-accent-blue/30
+           font-medium rounded-lg border border-accent-blue/30
            hover:bg-accent-blue/5 active:scale-[0.98]
            transition-all duration-200 ease-notion
            focus:outline-none focus:ring-2 focus:ring-accent-blue/20;
@@ -151,7 +373,7 @@
   /* Ghost button */
   .btn-ghost {
     @apply inline-flex items-center justify-center px-4 py-2 bg-transparent text-text-secondary 
-           font-medium rounded-notion
+           font-medium rounded-lg
            hover:bg-background-tertiary hover:text-text-primary active:scale-[0.98]
            transition-all duration-200 ease-notion;
   }
@@ -159,7 +381,7 @@
   /* Destructive button */
   .btn-destructive {
     @apply inline-flex items-center justify-center px-4 py-2 bg-red-500 text-white 
-           font-medium rounded-notion
+           font-medium rounded-lg
            hover:bg-red-600 active:scale-[0.98]
            transition-all duration-200 ease-notion
            focus:outline-none focus:ring-2 focus:ring-red-500/30;
@@ -168,13 +390,14 @@
   /* Success button */
   .btn-success {
     @apply inline-flex items-center justify-center px-4 py-2 bg-accent-green text-white 
-           font-medium rounded-notion
+           font-medium rounded-lg
            hover:bg-opacity-90 active:scale-[0.98]
            transition-all duration-200 ease-notion
            focus:outline-none focus:ring-2 focus:ring-accent-green/30;
   }
 
-  /* Progress bar styles */
+  /* ========== PROGRESS BAR STYLES ========== */
+
   .progress-default {
     @apply h-2 w-full bg-background-tertiary rounded-full overflow-hidden;
   }
@@ -195,7 +418,8 @@
     @apply bg-gradient-to-r from-red-400 to-red-500;
   }
 
-  /* Animations */
+  /* ========== ANIMATIONS ========== */
+
   .animate-fade-in {
     animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -211,6 +435,13 @@
   .animate-slide-in {
     animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
+
+  /* Staggered animation delays */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
 
   @keyframes fadeIn {
     from {
@@ -344,5 +575,24 @@
 
   .bg-tertiary {
     background-color: var(--bg-tertiary);
+  }
+
+  /* Gradient text for titles */
+  .text-gradient-game {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  }
+
+  /* Glow effects */
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(91, 141, 239, 0.4);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 20px rgba(52, 168, 83, 0.4);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
   }
 }

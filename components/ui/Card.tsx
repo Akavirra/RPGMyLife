@@ -2,11 +2,13 @@ import { cn } from '@/lib/utils';
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'glass' | 'bordered';
+  hover?: boolean;
 }
 
 export function Card({
   className,
   variant = 'default',
+  hover = false,
   children,
   ...props
 }: CardProps) {
@@ -21,6 +23,7 @@ export function Card({
       className={cn(
         'rounded-lg transition-all duration-200 ease-notion',
         variantStyles[variant],
+        hover && 'card-hover-lift cursor-pointer',
         className
       )}
       {...props}

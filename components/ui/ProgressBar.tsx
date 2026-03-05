@@ -5,6 +5,7 @@ interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
   max?: number;
   showLabel?: boolean;
   variant?: 'default' | 'xp' | 'skill' | 'health';
+  animated?: boolean;
 }
 
 const variantStyles: Record<string, string> = {
@@ -20,6 +21,7 @@ export function ProgressBar({
   max = 100,
   showLabel = false,
   variant = 'default',
+  animated = false,
   ...props
 }: ProgressBarProps) {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
@@ -30,7 +32,8 @@ export function ProgressBar({
         <div
           className={cn(
             'h-full rounded-full transition-all duration-500 ease-notion',
-            variantStyles[variant]
+            variantStyles[variant],
+            animated && 'progress-shimmer'
           )}
           style={{ width: `${percentage}%` }}
         />
@@ -65,7 +68,7 @@ export function XpProgress({ currentXp, nextLevelXp, level }: XpProgressProps) {
           {xpProgress} / {xpNeeded} XP
         </span>
       </div>
-      <ProgressBar value={xpProgress} max={xpNeeded} variant="xp" />
+      <ProgressBar value={xpProgress} max={xpNeeded} variant="xp" animated />
     </div>
   );
 }
