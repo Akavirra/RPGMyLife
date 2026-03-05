@@ -442,7 +442,7 @@ export function ProfileEdit({ isOpen, onClose }: ProfileEditProps) {
           {/* Username */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-text-secondary mb-2">
-              Ім'я користувача
+              Нікнейм
             </label>
             <input
               type="text"
@@ -451,7 +451,7 @@ export function ProfileEdit({ isOpen, onClose }: ProfileEditProps) {
               className={`input-notion w-full ${
                 getFieldError('username') ? 'border-red-500' : ''
               }`}
-              placeholder="username"
+              placeholder="нікнейм"
             />
             {getFieldError('username') && (
               <p className="text-red-500 text-xs mt-1">{getFieldError('username')}</p>
