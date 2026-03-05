@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { ProgressBar, XpProgress } from '@/components/ui/ProgressBar';
 import { Badge } from '@/components/ui/Badge';
 import { getLevelTitle, getXpForNextLevel } from '@/lib/game/level';
-import { User, Zap, Trophy, Target, Star, Flame } from 'lucide-react';
+import { User, Zap, Trophy, Target, Star, Flame, Pencil } from 'lucide-react';
+import { ProfileEdit } from '@/components/profile/ProfileEdit';
+import { useState } from 'react';
 
 interface UserData {
   id: number;
@@ -35,6 +37,7 @@ export function CharacterStats({
   activeQuestsCount = 0,
   completedQuestsCount = 0,
 }: CharacterStatsProps) {
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const nextLevelXp = getXpForNextLevel(user.level);
 
   return (
@@ -79,6 +82,13 @@ export function CharacterStats({
               {user.totalXp} XP
             </Badge>
           </div>
+          <button
+            onClick={() => setIsEditOpen(true)}
+            className="mt-3 flex items-center gap-1.5 text-sm text-accent-blue hover:text-accent-blue/80 transition-colors"
+          >
+            <Pencil className="w-4 h-4" />
+            Редагувати профіль
+          </button>
         </div>
       </div>
 
@@ -182,6 +192,8 @@ export function CharacterStats({
           </CardContent>
         </Card>
       )}
+
+      <ProfileEdit isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} />
     </div>
   );
 }
