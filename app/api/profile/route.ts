@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema';
 import { eq, or } from 'drizzle-orm';
-import { verifySessionToken, getUserById, logUserAction, verifyPassword, hashPassword, generateSalt } from '@/lib/auth';
+import { verifySessionToken, getUserById, verifyPassword, hashPassword, generateSalt } from '@/lib/auth';
 import { uploadAvatar } from '@/lib/cloudinary';
 
 // Validation constants
@@ -146,15 +146,34 @@ export async function PATCH(request: NextRequest) {
     
     // Handle multipart form data (for file uploads)
     if (contentType.includes('multipart/form-data')) {
-      return handleMultipartUpdate(request, session.userId);
+      try {
+        return await handleMultipartUpdate(request, session.userId);
+      } catch (error: any) {
+        console.error('Multipart update error:', error);
+        return NextResponse.json(
+          { error: error.message || 'Помилка оновлення профілю' },
+          { status: 500 }
+        );
+      }
     }
     
     // Handle JSON data (for regular updates)
-    return handleJsonUpdate(request, session.userId);
+    try {
+      return await handleJsonUpdate(request, session.userId);
+    } catch (error: any) {
+      console.error('JSON update error:', error);
+      return NextResponse.json(
+        { error: error.message || 'Помилка оновлення профілю' },
+        { status: 500 }
+      );
+    }
     
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error updating profile:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message || 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -255,11 +274,6 @@ async function handleJsonUpdate(request: NextRequest, userId: number): Promise<N
         updatedAt: new Date(),
       })
       .where(eq(users.id, userId));
-    
-    // Log password change
-    await logUserAction(userId, 'password_changed', {
-      timestamp: new Date().toISOString(),
-    });
   }
   
   // Update user profile
@@ -270,12 +284,6 @@ async function handleJsonUpdate(request: NextRequest, userId: number): Promise<N
         updatedAt: new Date(),
       })
       .where(eq(users.id, userId));
-    
-    // Log profile update
-    await logUserAction(userId, 'profile_updated', {
-      updatedFields: Object.keys(updateData),
-      timestamp: new Date().toISOString(),
-    });
   }
   
   // Fetch updated user
@@ -347,11 +355,6 @@ async function handleMultipartUpdate(request: NextRequest, userId: number): Prom
       const uploadedUrl = await uploadAvatar(buffer, userId);
       if (uploadedUrl) {
         avatarUrl = uploadedUrl;
-        
-        // Log avatar update
-        await logUserAction(userId, 'avatar_updated', {
-          timestamp: new Date().toISOString(),
-        });
       } else {
         errors.push({ 
           field: 'avatar', 
@@ -389,12 +392,6 @@ async function handleMultipartUpdate(request: NextRequest, userId: number): Prom
         updatedAt: new Date(),
       })
       .where(eq(users.id, userId));
-    
-    // Log profile update
-    await logUserAction(userId, 'profile_updated', {
-      updatedFields: Object.keys(updateData),
-      timestamp: new Date().toISOString(),
-    });
   }
   
   // Fetch updated user

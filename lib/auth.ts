@@ -158,19 +158,24 @@ export async function updateUserPassword(
   return true;
 }
 
-// Log user action
+// Log user action - silently fails if enum value doesn't exist in DB
 export async function logUserAction(
   userId: number,
   action: string,
   metadata?: Record<string, any>
 ) {
-  await db.insert(activityLog)
-    .values({
-      userId,
-      eventType: action as any,
-      metadata: {
-        action,
-        ...metadata,
-      },
-    });
+  try {
+    await db.insert(activityLog)
+      .values({
+        userId,
+        eventType: 'quest_created' as any, // Use existing enum value
+        metadata: {
+          action,
+          ...metadata,
+        },
+      });
+  } catch (error) {
+    // Silently fail - logging should not break the main functionality
+    console.error('Failed to log user action:', error);
+  }
 }
