@@ -3,9 +3,12 @@
 import { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { CharacterStats } from '@/components/character/CharacterStats';
+import { ProfileEdit } from '@/components/profile/ProfileEdit';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { Button } from '@/components/ui/Button';
+import { Edit } from 'lucide-react';
 
 interface UserData {
   id: number;
@@ -29,6 +32,7 @@ export default function CharacterPage() {
   const [activeQuestsCount, setActiveQuestsCount] = useState(0);
   const [completedQuestsCount, setCompletedQuestsCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [isProfileEditOpen, setIsProfileEditOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -92,6 +96,18 @@ export default function CharacterPage() {
       <Header title="Герой" />
       
       <main className="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 max-w-4xl mx-auto">
+        {/* Edit Profile Button */}
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            onClick={() => setIsProfileEditOpen(true)}
+            className="flex items-center gap-2"
+          >
+            <Edit className="w-4 h-4" />
+            Редагувати профіль
+          </Button>
+        </div>
+
         {/* Character Stats */}
         <CharacterStats
           user={userData}
@@ -134,6 +150,12 @@ export default function CharacterPage() {
           </CardContent>
         </Card>
       </main>
+
+      {/* Profile Edit Modal */}
+      <ProfileEdit
+        isOpen={isProfileEditOpen}
+        onClose={() => setIsProfileEditOpen(false)}
+      />
     </div>
   );
 }

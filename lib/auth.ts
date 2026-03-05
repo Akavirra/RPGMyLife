@@ -1,7 +1,7 @@
 'server-only';
 import { SignJWT, jwtVerify } from 'jose';
 import { db } from './db';
-import { users } from './db/schema';
+import { users, activityLog } from './db/schema';
 import { eq } from 'drizzle-orm';
 
 const JWT_SECRET = new TextEncoder().encode(
@@ -9,14 +9,14 @@ const JWT_SECRET = new TextEncoder().encode(
 );
 
 // Generate a random salt
-function generateSalt(): string {
+export function generateSalt(): string {
   const array = new Uint8Array(16);
   crypto.getRandomValues(array);
   return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 // Password hashing using Web Crypto API with salt
-async function hashPassword(password: string, salt: string): Promise<string> {
+export async function hashPassword(password: string, salt: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(password + salt);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -25,7 +25,7 @@ async function hashPassword(password: string, salt: string): Promise<string> {
 }
 
 // Verify password with salt
-async function verifyPassword(password: string, hash: string, salt: string): Promise<boolean> {
+export async function verifyPassword(password: string, hash: string, salt: string): Promise<boolean> {
   const passwordHash = await hashPassword(password, salt);
   return passwordHash === hash;
 }
@@ -137,4 +137,40 @@ export async function updateUser(
       updatedAt: new Date(),
     })
     .where(eq(users.id, userId));
+}
+
+// Update user password
+export async function updateUserPassword(
+  userId: number,
+  newPassword: string
+): Promise<boolean> {
+  const salt = generateSalt();
+  const passwordHash = await hashPassword(newPassword, salt);
+  
+  await db.update(users)
+    .set({
+      passwordHash,
+      salt,
+      updatedAt: new Date(),
+    })
+    .where(eq(users.id, userId));
+  
+  return true;
+}
+
+// Log user action
+export async function logUserAction(
+  userId: number,
+  action: string,
+  metadata?: Record<string, any>
+) {
+  await db.insert(activityLog)
+    .values({
+      userId,
+      eventType: action as any,
+      metadata: {
+        action,
+        ...metadata,
+      },
+    });
 }
