@@ -68,7 +68,7 @@ export default function CharacterPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background-primary">
-        <Header title="Персонаж" />
+        <Header title="Герой" />
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent-blue"></div>
         </div>
@@ -79,7 +79,7 @@ export default function CharacterPage() {
   if (!userData) {
     return (
       <div className="min-h-screen bg-background-primary">
-        <Header title="Персонаж" />
+        <Header title="Герой" />
         <div className="p-4 text-center text-text-secondary">
           Не вдалося завантажити дані персонажа
         </div>
@@ -89,7 +89,7 @@ export default function CharacterPage() {
 
   return (
     <div className="min-h-screen bg-background-primary">
-      <Header title="Персонаж" />
+      <Header title="Герой" />
       
       <main className="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 max-w-4xl mx-auto">
         {/* Character Stats */}

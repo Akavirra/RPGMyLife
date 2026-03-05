@@ -110,7 +110,7 @@ export default function CharactersPage() {
   return (
     <div className="min-h-screen bg-background-primary">
       <Header 
-        title="Герої"
+        title="Персонажі"
         rightContent={
           <Button size="sm" onClick={openNewForm} className="hidden md:flex">
             <Plus className="w-4 h-4 mr-1" />
