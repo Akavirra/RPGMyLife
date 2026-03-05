@@ -101,7 +101,7 @@ export default async function HomePage() {
         />
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-4">
           <Link href="/quests/new">
             <Button className="w-full" size="lg">
               <Plus className="w-5 h-5 mr-2" />
@@ -113,16 +113,6 @@ export default async function HomePage() {
             <Button variant="secondary" className="w-full" size="lg">
               <Scroll className="w-5 h-5 mr-2" />
               Всі квести
-            </Button>
-          </Link>
-          <Link href="/locations">
-            <Button variant="outline" className="w-full" size="lg">
-              Локації
-            </Button>
-          </Link>
-          <Link href="/characters">
-            <Button variant="outline" className="w-full" size="lg">
-              Герої
             </Button>
           </Link>
         </div>
