@@ -7,9 +7,10 @@ import { verifySessionToken } from '@/lib/auth';
 // GET /api/journal/[id] - Get single journal entry
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id: entryIdStr } = await params;
     const sessionToken = request.cookies.get('session')?.value;
     if (!sessionToken) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -20,7 +21,7 @@ export async function GET(
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
-    const entryId = parseInt(params.id);
+    const entryId = parseInt(entryIdStr);
     if (isNaN(entryId)) {
       return NextResponse.json({ error: 'Invalid entry ID' }, { status: 400 });
     }
@@ -48,9 +49,10 @@ export async function GET(
 // PUT /api/journal/[id] - Update journal entry
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id: entryIdStr } = await params;
     const sessionToken = request.cookies.get('session')?.value;
     if (!sessionToken) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -61,7 +63,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
-    const entryId = parseInt(params.id);
+    const entryId = parseInt(entryIdStr);
     if (isNaN(entryId)) {
       return NextResponse.json({ error: 'Invalid entry ID' }, { status: 400 });
     }
@@ -103,9 +105,10 @@ export async function PUT(
 // DELETE /api/journal/[id] - Delete journal entry
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id: entryIdStr } = await params;
     const sessionToken = request.cookies.get('session')?.value;
     if (!sessionToken) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -116,7 +119,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
-    const entryId = parseInt(params.id);
+    const entryId = parseInt(entryIdStr);
     if (isNaN(entryId)) {
       return NextResponse.json({ error: 'Invalid entry ID' }, { status: 400 });
     }
