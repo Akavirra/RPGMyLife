@@ -13,6 +13,7 @@ import {
 // Enums
 export const questStatusEnum = pgEnum('quest_status', ['draft', 'active', 'completed', 'failed']);
 export const questTypeEnum = pgEnum('quest_type', ['once', 'daily', 'weekly', 'chain']);
+export const characterRelationEnum = pgEnum('character_relation', ['acquaintance', 'friend', 'family', 'enemy']);
 export const eventTypeEnum = pgEnum('event_type', [
   'quest_created',
   'quest_completed',
@@ -64,8 +65,10 @@ export const characters = pgTable('characters', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
-  role: text('role'),
+  relation: characterRelationEnum('relation'),
+  description: text('description'),
   avatarUrl: text('avatar_url'),
+  guildId: integer('guild_id').references(() => guilds.id, { onDelete: 'set null' }),
   reputationLevel: integer('reputation_level').notNull().default(50), // 0-100
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
@@ -163,4 +166,5 @@ export type NewJournalEntry = typeof journal.$inferInsert;
 
 export type QuestStatus = 'draft' | 'active' | 'completed' | 'failed';
 export type QuestType = 'once' | 'daily' | 'weekly' | 'chain';
+export type CharacterRelation = 'acquaintance' | 'friend' | 'family' | 'enemy';
 export type EventType = 'quest_created' | 'quest_completed' | 'quest_failed' | 'level_up' | 'skill_up';

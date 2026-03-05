@@ -44,10 +44,22 @@ export async function POST(request: NextRequest) {
         break;
       case 'character':
         const characterId = parseInt(id || '0');
-        if (isNaN(characterId)) {
-          return NextResponse.json({ error: 'Invalid character ID' }, { status: 400 });
+        if (isNaN(characterId) || characterId === 0) {
+          // Temporary upload for new character - use generic upload with character folder
+          const { uploadImage: charUpload } = await import('@/lib/cloudinary');
+          const result = await charUpload(buffer, {
+            folder: 'life-rpg/characters',
+            transformation: [
+              { width: 300, height: 300, crop: 'fill' },
+              { gravity: 'face' },
+              { quality: 'auto' },
+              { fetch_format: 'auto' },
+            ],
+          });
+          url = result?.url || null;
+        } else {
+          url = await uploadCharacterAvatar(buffer, characterId);
         }
-        url = await uploadCharacterAvatar(buffer, characterId);
         break;
       default:
         // Generic upload

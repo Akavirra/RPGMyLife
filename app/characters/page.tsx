@@ -1,23 +1,40 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { Plus, User, Edit, Trash2 } from 'lucide-react';
-import type { Character } from '@/lib/db/schema';
+import { Plus, User, Edit, Trash2, Upload, X, Shield } from 'lucide-react';
+import type { Character, Guild, CharacterRelation } from '@/lib/db/schema';
+
+const RELATION_LABELS: Record<CharacterRelation, string> = {
+  acquaintance: 'Знайомий',
+  friend: 'Друг',
+  family: 'Сім\'я',
+  enemy: 'Ворог',
+};
 
 export default function CharactersPage() {
   const [characters, setCharacters] = useState<Character[]>([]);
+  const [guilds, setGuilds] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingCharacter, setEditingCharacter] = useState<Character | null>(null);
-  const [formData, setFormData] = useState({ name: '', role: '' });
+  const [formData, setFormData] = useState({
+    name: '',
+    relation: '' as CharacterRelation | '',
+    description: '',
+    avatarUrl: '',
+    guildId: '' as string,
+  });
   const [submitting, setSubmitting] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchCharacters();
+    fetchGuilds();
   }, []);
 
   const fetchCharacters = async () => {
@@ -34,6 +51,45 @@ export default function CharactersPage() {
     }
   };
 
+  const fetchGuilds = async () => {
+    try {
+      const res = await fetch('/api/guilds', { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        setGuilds(data.guilds || []);
+      }
+    } catch (error) {
+      console.error('Error fetching guilds:', error);
+    }
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingAvatar(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('type', 'character');
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setFormData(prev => ({ ...prev, avatarUrl: data.url }));
+      }
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -42,11 +98,19 @@ export default function CharactersPage() {
       const url = editingCharacter ? `/api/characters/${editingCharacter.id}` : '/api/characters';
       const method = editingCharacter ? 'PATCH' : 'POST';
 
+      const payload = {
+        name: formData.name,
+        relation: formData.relation || null,
+        description: formData.description || null,
+        avatarUrl: formData.avatarUrl || null,
+        guildId: formData.guildId ? parseInt(formData.guildId) : null,
+      };
+
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -56,7 +120,13 @@ export default function CharactersPage() {
 
       setShowForm(false);
       setEditingCharacter(null);
-      setFormData({ name: '', role: '' });
+      setFormData({
+        name: '',
+        relation: '',
+        description: '',
+        avatarUrl: '',
+        guildId: '',
+      });
       fetchCharacters();
     } catch (error) {
       console.error('Error saving character:', error);
@@ -67,7 +137,13 @@ export default function CharactersPage() {
 
   const handleEdit = (character: Character) => {
     setEditingCharacter(character);
-    setFormData({ name: character.name, role: character.role || '' });
+    setFormData({
+      name: character.name,
+      relation: character.relation || '',
+      description: character.description || '',
+      avatarUrl: character.avatarUrl || '',
+      guildId: character.guildId?.toString() || '',
+    });
     setShowForm(true);
   };
 
@@ -92,8 +168,25 @@ export default function CharactersPage() {
 
   const openNewForm = () => {
     setEditingCharacter(null);
-    setFormData({ name: '', role: '' });
+    setFormData({
+      name: '',
+      relation: '',
+      description: '',
+      avatarUrl: '',
+      guildId: '',
+    });
     setShowForm(true);
+  };
+
+  const getRelationLabel = (relation: string | null) => {
+    if (!relation) return null;
+    return RELATION_LABELS[relation as CharacterRelation] || relation;
+  };
+
+  const getGuildName = (guildId: number | null) => {
+    if (!guildId) return null;
+    const guild = guilds.find(g => g.id === guildId);
+    return guild?.name || null;
   };
 
   if (loading) {
@@ -127,6 +220,7 @@ export default function CharactersPage() {
             Новий
           </Button>
         </div>
+        
         {/* New/Edit Form */}
         {showForm && (
           <Card>
@@ -137,6 +231,65 @@ export default function CharactersPage() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Avatar Upload */}
+                <div>
+                  <label className="block text-sm text-text-secondary mb-1">
+                    Аватар
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      {formData.avatarUrl ? (
+                        <img 
+                          src={formData.avatarUrl} 
+                          alt="Avatar" 
+                          className="w-20 h-20 rounded-full object-cover border-2 border-accent-blue"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 rounded-full bg-background-secondary border-2 border-dashed border-text-muted flex items-center justify-center">
+                          <User className="w-8 h-8 text-text-muted" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAvatarUpload}
+                        className="hidden"
+                      />
+                      <Button 
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingAvatar}
+                      >
+                        {uploadingAvatar ? (
+                          'Завантаження...'
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4 mr-1" />
+                            Завантажити
+                          </>
+                        )}
+                      </Button>
+                      {formData.avatarUrl && (
+                        <Button 
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setFormData(prev => ({ ...prev, avatarUrl: '' }))}
+                        >
+                          <X className="w-4 h-4 mr-1" />
+                          Видалити
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Name */}
                 <div>
                   <label className="block text-sm text-text-secondary mb-1">
                     Ім'я *
@@ -150,18 +303,57 @@ export default function CharactersPage() {
                     placeholder="Ім'я героя"
                   />
                 </div>
+
+                {/* Relation */}
                 <div>
                   <label className="block text-sm text-text-secondary mb-1">
-                    Роль
+                    Відношення
                   </label>
-                  <input
-                    type="text"
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                  <select
+                    value={formData.relation}
+                    onChange={(e) => setFormData({ ...formData, relation: e.target.value as CharacterRelation })}
                     className="input-notion"
-                    placeholder="Наприклад: союзник, ворог, наставник"
+                  >
+                    <option value="">Оберіть відношення</option>
+                    <option value="acquaintance">Знайомий</option>
+                    <option value="friend">Друг</option>
+                    <option value="family">Сім'я</option>
+                    <option value="enemy">Ворог</option>
+                  </select>
+                </div>
+
+                {/* Description */}
+                <div>
+                  <label className="block text-sm text-text-secondary mb-1">
+                    Опис
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    className="input-notion min-h-[100px]"
+                    placeholder="Опис персонажа, його історія, особливості..."
                   />
                 </div>
+
+                {/* Guild */}
+                <div>
+                  <label className="block text-sm text-text-secondary mb-1">
+                    Гільдія
+                  </label>
+                  <select
+                    value={formData.guildId}
+                    onChange={(e) => setFormData({ ...formData, guildId: e.target.value })}
+                    className="input-notion"
+                  >
+                    <option value="">Без гільдії</option>
+                    {guilds.map((guild) => (
+                      <option key={guild.id} value={guild.id}>
+                        {guild.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div className="flex gap-2">
                   <Button type="submit" disabled={submitting}>
                     {submitting ? 'Збереження...' : 'Зберегти'}
@@ -190,15 +382,36 @@ export default function CharactersPage() {
                 <CardContent className="py-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
-                      <div className="p-2 bg-accent-blue/10 rounded-lg">
-                        <User className="w-5 h-5 text-accent-blue" />
-                      </div>
+                      {character.avatarUrl ? (
+                        <img 
+                          src={character.avatarUrl} 
+                          alt={character.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="p-2 bg-accent-blue/10 rounded-lg">
+                          <User className="w-5 h-5 text-accent-blue" />
+                        </div>
+                      )}
                       <div>
                         <h3 className="font-medium text-text-primary">{character.name}</h3>
-                        {character.role && (
-                          <p className="text-text-secondary text-sm mt-1">{character.role}</p>
+                        {character.relation && (
+                          <Badge variant="info" className="mt-1">
+                            {getRelationLabel(character.relation)}
+                          </Badge>
                         )}
-                        <Badge variant="info" className="mt-2">
+                        {character.guildId && (
+                          <div className="flex items-center gap-1 mt-1 text-text-secondary text-sm">
+                            <Shield className="w-3 h-3" />
+                            {getGuildName(character.guildId)}
+                          </div>
+                        )}
+                        {character.description && (
+                          <p className="text-text-secondary text-sm mt-1 line-clamp-2">
+                            {character.description}
+                          </p>
+                        )}
+                        <Badge variant="default" className="mt-2">
                           Репутація: {character.reputationLevel}%
                         </Badge>
                       </div>

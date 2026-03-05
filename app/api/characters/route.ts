@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, role, avatarUrl } = body;
+    const { name, relation, description, avatarUrl, guildId } = body;
 
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -52,8 +52,10 @@ export async function POST(request: NextRequest) {
       .values({
         userId: session.userId,
         name,
-        role: role || null,
+        relation: relation || null,
+        description: description || null,
         avatarUrl: avatarUrl || null,
+        guildId: guildId || null,
         reputationLevel: 50,
       })
       .returning();

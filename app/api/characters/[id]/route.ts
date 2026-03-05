@@ -37,13 +37,15 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
 
     const body = await request.json();
-    const { name, role, avatarUrl } = body;
+    const { name, relation, description, avatarUrl, guildId } = body;
 
     const [updatedCharacter] = await db.update(characters)
       .set({
         name: name ?? existingCharacter.name,
-        role: role !== undefined ? role : existingCharacter.role,
+        relation: relation !== undefined ? relation : existingCharacter.relation,
+        description: description !== undefined ? description : existingCharacter.description,
         avatarUrl: avatarUrl !== undefined ? avatarUrl : existingCharacter.avatarUrl,
+        guildId: guildId !== undefined ? guildId : existingCharacter.guildId,
       })
       .where(eq(characters.id, characterId))
       .returning();
