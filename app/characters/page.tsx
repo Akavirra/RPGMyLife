@@ -98,17 +98,17 @@ export default function CharactersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950">
+      <div className="min-h-screen bg-background-primary">
         <Header title="Герої" />
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-amber-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent-blue"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-background-primary">
       <Header 
         title="Герої"
         rightContent={
@@ -119,10 +119,10 @@ export default function CharactersPage() {
         }
       />
       
-      <main className="p-4 space-y-4">
+      <main className="p-4 space-y-4 max-w-lg mx-auto">
         {/* New/Edit Form */}
         {showForm && (
-          <Card variant="glass">
+          <Card>
             <CardHeader>
               <CardTitle className="text-lg">
                 {editingCharacter ? 'Редагувати героя' : 'Новий герой'}
@@ -131,27 +131,27 @@ export default function CharactersPage() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm text-slate-400 mb-1">
+                  <label className="block text-sm text-text-secondary mb-1">
                     Ім'я *
                   </label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-amber-500"
+                    className="input-notion"
                     required
                     placeholder="Ім'я героя"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-slate-400 mb-1">
+                  <label className="block text-sm text-text-secondary mb-1">
                     Роль
                   </label>
                   <input
                     type="text"
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-amber-500"
+                    className="input-notion"
                     placeholder="Наприклад: союзник, ворог, наставник"
                   />
                 </div>
@@ -179,17 +179,17 @@ export default function CharactersPage() {
         {characters.length > 0 ? (
           <div className="space-y-3">
             {characters.map((character) => (
-              <Card key={character.id} variant="glass">
+              <Card key={character.id}>
                 <CardContent className="py-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
-                      <div className="p-2 bg-blue-500/20 rounded-lg">
-                        <User className="w-5 h-5 text-blue-400" />
+                      <div className="p-2 bg-accent-blue/10 rounded-lg">
+                        <User className="w-5 h-5 text-accent-blue" />
                       </div>
                       <div>
-                        <h3 className="text-slate-200 font-medium">{character.name}</h3>
+                        <h3 className="font-medium text-text-primary">{character.name}</h3>
                         {character.role && (
-                          <p className="text-slate-400 text-sm mt-1">{character.role}</p>
+                          <p className="text-text-secondary text-sm mt-1">{character.role}</p>
                         )}
                         <Badge variant="info" className="mt-2">
                           Репутація: {character.reputationLevel}%
@@ -209,7 +209,7 @@ export default function CharactersPage() {
                         size="sm"
                         onClick={() => handleDelete(character.id)}
                       >
-                        <Trash2 className="w-4 h-4 text-red-400" />
+                        <Trash2 className="w-4 h-4 text-red-500" />
                       </Button>
                     </div>
                   </div>
@@ -219,8 +219,8 @@ export default function CharactersPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <User className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-            <p className="text-slate-400 mb-4">Героїв ще немає</p>
+            <User className="w-12 h-12 text-text-muted mx-auto mb-3" />
+            <p className="text-text-secondary mb-4">Героїв ще немає</p>
             <Button onClick={openNewForm}>Створити першого героя</Button>
           </div>
         )}

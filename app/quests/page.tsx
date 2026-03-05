@@ -87,7 +87,7 @@ export default function QuestsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-background-primary">
       <Header 
         title="Квести"
         rightContent={
@@ -100,7 +100,7 @@ export default function QuestsPage() {
         }
       />
 
-      <main className="p-4 space-y-4">
+      <main className="p-4 space-y-4 max-w-lg mx-auto">
         {/* Filters */}
         <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
           {filters.map((f) => (
@@ -109,8 +109,8 @@ export default function QuestsPage() {
               onClick={() => setFilter(f.value)}
               className={`px-4 py-2 rounded-full text-sm whitespace-nowrap transition-all ${
                 filter === f.value
-                  ? 'bg-amber-500 text-slate-900'
-                  : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                  ? 'bg-accent-blue text-white'
+                  : 'bg-background-tertiary text-text-secondary hover:bg-gray-200'
               }`}
             >
               {f.label}
@@ -121,7 +121,7 @@ export default function QuestsPage() {
         {/* Quests List */}
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-amber-500"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent-blue"></div>
           </div>
         ) : quests.length > 0 ? (
           <div className="space-y-4">
@@ -136,7 +136,7 @@ export default function QuestsPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-slate-400 mb-4">Квестів не знайдено</p>
+            <p className="text-text-secondary mb-4">Квестів не знайдено</p>
             <Link href="/quests/new">
               <Button>Створити перший квест</Button>
             </Link>

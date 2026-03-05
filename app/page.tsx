@@ -81,17 +81,17 @@ export default async function HomePage() {
   // If not logged in, show login form only
   if (!userData) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background-primary flex items-center justify-center p-4">
         <LoginForm />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-background-primary">
       <Header title="Life RPG" />
       
-      <main className="p-4 space-y-6">
+      <main className="p-4 space-y-6 max-w-lg mx-auto">
         {/* Character Stats */}
         <CharacterStats
           user={userData}
@@ -117,7 +117,7 @@ export default async function HomePage() {
         </div>
 
         {/* Active Quests Preview */}
-        <Card variant="glass">
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">
               Активні квести
@@ -137,8 +137,8 @@ export default async function HomePage() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <Trophy className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-                <p className="text-slate-400">
+                <Trophy className="w-12 h-12 text-text-muted mx-auto mb-3" />
+                <p className="text-text-secondary">
                   Квестів ще немає
                 </p>
                 <Link href="/quests/new">

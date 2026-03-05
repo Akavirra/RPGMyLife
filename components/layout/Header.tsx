@@ -33,27 +33,27 @@ export function Header({
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 bg-slate-950/95 backdrop-blur-lg border-b border-amber-700/30',
+        'sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-border-light',
         className
       )}
     >
-      <div className="flex items-center justify-between h-14 px-4">
+      <div className="flex items-center justify-between h-14 px-4 max-w-lg mx-auto">
         {/* Left section */}
         <div className="flex items-center gap-2">
           {showBack && (
             <button
               onClick={() => router.back()}
-              className="p-2 -ml-2 text-slate-400 hover:text-amber-400 transition-colors"
+              className="p-2 -ml-2 text-text-secondary hover:text-accent-blue transition-colors"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
           )}
           {showMenu && (
-            <button className="p-2 -ml-2 text-slate-400 hover:text-amber-400 transition-colors">
+            <button className="p-2 -ml-2 text-text-secondary hover:text-accent-blue transition-colors">
               <Menu className="w-6 h-6" />
             </button>
           )}
-          <h1 className="text-xl font-bold text-amber-400 font-cinzel">
+          <h1 className="text-xl font-bold text-text-primary">
             {title}
           </h1>
         </div>
@@ -63,7 +63,7 @@ export function Header({
           {user && (
             <button
               onClick={handleLogout}
-              className="p-2 text-slate-400 hover:text-amber-400 transition-colors"
+              className="p-2 text-text-secondary hover:text-accent-blue transition-colors"
               title="Вийти"
             >
               <LogOut className="w-5 h-5" />

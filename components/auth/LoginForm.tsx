@@ -37,9 +37,9 @@ export function LoginForm() {
   };
 
   return (
-    <Card variant="glass" className="w-full max-w-md">
+    <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle className="text-center text-amber-400">
+        <CardTitle className="text-center">
           {isLogin ? 'Вхід в систему' : 'Реєстрація'}
         </CardTitle>
       </CardHeader>
@@ -48,27 +48,27 @@ export function LoginForm() {
           {!isLogin && (
             <>
               <div>
-                <label className="block text-sm text-slate-400 mb-1">
+                <label className="block text-sm text-text-secondary mb-1">
                   Ім'я
                 </label>
                 <input
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-amber-500"
+                  className="input-notion"
                   required={!isLogin}
                   placeholder="Ваше ім'я"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-400 mb-1">
+                <label className="block text-sm text-text-secondary mb-1">
                   Username (необов'язково)
                 </label>
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-amber-500"
+                  className="input-notion"
                   placeholder="username"
                 />
               </div>
@@ -76,42 +76,42 @@ export function LoginForm() {
           )}
           
           <div>
-            <label className="block text-sm text-slate-400 mb-1">
+            <label className="block text-sm text-text-secondary mb-1">
               Email
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-amber-500"
+              className="input-notion"
               required
               placeholder="email@example.com"
             />
           </div>
           
           <div>
-            <label className="block text-sm text-slate-400 mb-1">
+            <label className="block text-sm text-text-secondary mb-1">
               Пароль
             </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-amber-500"
+              className="input-notion"
               required
               placeholder="••••••••"
             />
           </div>
 
           {error && (
-            <p className="text-red-400 text-sm text-center">{error}</p>
+            <p className="text-red-500 text-sm text-center">{error}</p>
           )}
 
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? 'Завантаження...' : isLogin ? 'Увійти' : 'Зареєструватися'}
           </Button>
 
-          <p className="text-center text-slate-400 text-sm">
+          <p className="text-center text-text-secondary text-sm">
             {isLogin ? 'Ще немає акаунту? ' : 'Вже є акаунт? '}
             <button
               type="button"
@@ -119,7 +119,7 @@ export function LoginForm() {
                 setIsLogin(!isLogin);
                 setError('');
               }}
-              className="text-amber-400 hover:text-amber-300"
+              className="text-accent-blue hover:underline"
             >
               {isLogin ? 'Зареєструватися' : 'Увійти'}
             </button>

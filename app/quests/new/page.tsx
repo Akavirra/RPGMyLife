@@ -80,17 +80,17 @@ export default function NewQuestPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950">
+      <div className="min-h-screen bg-background-primary">
         <Header title="Новий квест" showBack />
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-amber-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent-blue"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-background-primary">
       <Header 
         title="Новий квест" 
         showBack 
@@ -103,11 +103,11 @@ export default function NewQuestPage() {
         }
       />
       
-      <main className="p-4">
+      <main className="p-4 max-w-lg mx-auto">
         {error && (
-          <Card variant="glass" className="mb-4">
+          <Card className="mb-4">
             <CardContent className="py-3">
-              <p className="text-red-400 text-sm text-center">{error}</p>
+              <p className="text-red-500 text-sm text-center">{error}</p>
             </CardContent>
           </Card>
         )}

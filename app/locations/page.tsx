@@ -98,17 +98,17 @@ export default function LocationsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950">
+      <div className="min-h-screen bg-background-primary">
         <Header title="Локації" />
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-amber-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent-blue"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-background-primary">
       <Header 
         title="Локації"
         rightContent={
@@ -119,10 +119,10 @@ export default function LocationsPage() {
         }
       />
       
-      <main className="p-4 space-y-4">
+      <main className="p-4 space-y-4 max-w-lg mx-auto">
         {/* New/Edit Form */}
         {showForm && (
-          <Card variant="glass">
+          <Card>
             <CardHeader>
               <CardTitle className="text-lg">
                 {editingLocation ? 'Редагувати локацію' : 'Нова локація'}
@@ -131,26 +131,26 @@ export default function LocationsPage() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm text-slate-400 mb-1">
+                  <label className="block text-sm text-text-secondary mb-1">
                     Назва *
                   </label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-amber-500"
+                    className="input-notion"
                     required
                     placeholder="Назва локації"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-slate-400 mb-1">
+                  <label className="block text-sm text-text-secondary mb-1">
                     Опис
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-amber-500"
+                    className="input-notion"
                     rows={3}
                     placeholder="Опис локації"
                   />
@@ -179,17 +179,17 @@ export default function LocationsPage() {
         {locations.length > 0 ? (
           <div className="space-y-3">
             {locations.map((location) => (
-              <Card key={location.id} variant="glass">
+              <Card key={location.id}>
                 <CardContent className="py-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
-                      <div className="p-2 bg-amber-500/20 rounded-lg">
-                        <MapPin className="w-5 h-5 text-amber-400" />
+                      <div className="p-2 bg-accent-blue/10 rounded-lg">
+                        <MapPin className="w-5 h-5 text-accent-blue" />
                       </div>
                       <div>
-                        <h3 className="text-slate-200 font-medium">{location.name}</h3>
+                        <h3 className="font-medium text-text-primary">{location.name}</h3>
                         {location.description && (
-                          <p className="text-slate-400 text-sm mt-1">{location.description}</p>
+                          <p className="text-text-secondary text-sm mt-1">{location.description}</p>
                         )}
                       </div>
                     </div>
@@ -206,7 +206,7 @@ export default function LocationsPage() {
                         size="sm"
                         onClick={() => handleDelete(location.id)}
                       >
-                        <Trash2 className="w-4 h-4 text-red-400" />
+                        <Trash2 className="w-4 h-4 text-red-500" />
                       </Button>
                     </div>
                   </div>
@@ -216,8 +216,8 @@ export default function LocationsPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <MapPin className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-            <p className="text-slate-400 mb-4">Локацій ще немає</p>
+            <MapPin className="w-12 h-12 text-text-muted mx-auto mb-3" />
+            <p className="text-text-secondary mb-4">Локацій ще немає</p>
             <Button onClick={openNewForm}>Створити першу локацію</Button>
           </div>
         )}

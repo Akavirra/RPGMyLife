@@ -70,7 +70,7 @@ export function QuestForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Title */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">
+        <label className="block text-sm font-medium text-text-primary mb-2">
           Назва квесту *
         </label>
         <input
@@ -78,14 +78,14 @@ export function QuestForm({
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           placeholder="Введи назву квесту"
-          className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50"
+          className="input-notion"
           required
         />
       </div>
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">
+        <label className="block text-sm font-medium text-text-primary mb-2">
           Опис
         </label>
         <textarea
@@ -93,13 +93,13 @@ export function QuestForm({
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           placeholder="Опиши деталі квесту..."
           rows={4}
-          className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 resize-none"
+          className="input-notion resize-none"
         />
       </div>
 
       {/* Quest Type */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">
+        <label className="block text-sm font-medium text-text-primary mb-2">
           Тип квесту
         </label>
         <div className="grid grid-cols-2 gap-3">
@@ -109,14 +109,14 @@ export function QuestForm({
               type="button"
               onClick={() => setFormData({ ...formData, type: type.value as QuestFormData['type'] })}
               className={cn(
-                'p-3 rounded-xl border text-left transition-all',
+                'p-3 rounded-lg border text-left transition-all',
                 formData.type === type.value
-                  ? 'border-amber-500 bg-amber-500/10'
-                  : 'border-slate-700/50 bg-slate-800/30 hover:border-slate-600'
+                  ? 'border-accent-blue bg-accent-blue/5'
+                  : 'border-border bg-background-tertiary hover:bg-gray-100'
               )}
             >
-              <div className="font-medium text-slate-200">{type.label}</div>
-              <div className="text-xs text-slate-500">{type.description}</div>
+              <div className="font-medium text-text-primary">{type.label}</div>
+              <div className="text-xs text-text-secondary">{type.description}</div>
             </button>
           ))}
         </div>
@@ -124,7 +124,7 @@ export function QuestForm({
 
       {/* Difficulty */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">
+        <label className="block text-sm font-medium text-text-primary mb-2">
           Складність
         </label>
         <div className="flex gap-2">
@@ -134,14 +134,14 @@ export function QuestForm({
               type="button"
               onClick={() => setFormData({ ...formData, difficulty: level })}
               className={cn(
-                'flex-1 p-3 rounded-xl border flex flex-col items-center transition-all',
+                'flex-1 p-3 rounded-lg border flex flex-col items-center transition-all',
                 formData.difficulty === level
-                  ? 'border-amber-500 bg-amber-500/10'
-                  : 'border-slate-700/50 bg-slate-800/30 hover:border-slate-600'
+                  ? 'border-accent-blue bg-accent-blue/5'
+                  : 'border-border bg-background-tertiary hover:bg-gray-100'
               )}
             >
               <div className="text-lg mb-1">{level} ⭐</div>
-              <div className="text-xs text-slate-400">{getDifficultyLabel(level)}</div>
+              <div className="text-xs text-text-secondary">{getDifficultyLabel(level)}</div>
             </button>
           ))}
         </div>
@@ -149,28 +149,28 @@ export function QuestForm({
 
       {/* Deadline */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">
+        <label className="block text-sm font-medium text-text-primary mb-2">
           Дедлайн
         </label>
         <input
           type="datetime-local"
           value={formData.deadline || ''}
           onChange={(e) => setFormData({ ...formData, deadline: e.target.value || null })}
-          className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50"
+          className="input-notion"
         />
       </div>
 
       {/* Location */}
       {locations.length > 0 && (
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-text-primary mb-2">
             <MapPin className="w-4 h-4 inline mr-1" />
             Локація
           </label>
           <select
             value={formData.locationId || ''}
             onChange={(e) => setFormData({ ...formData, locationId: e.target.value ? Number(e.target.value) : null })}
-            className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50"
+            className="input-notion"
           >
             <option value="">Без локації</option>
             {locations.map((loc) => (
@@ -185,7 +185,7 @@ export function QuestForm({
       {/* Characters */}
       {characters.length > 0 && (
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-text-primary mb-2">
             <Users className="w-4 h-4 inline mr-1" />
             Персонажі
           </label>
@@ -203,8 +203,8 @@ export function QuestForm({
                 className={cn(
                   'px-3 py-1.5 rounded-lg border text-sm transition-all',
                   formData.characterIds.includes(char.id)
-                    ? 'border-amber-500 bg-amber-500/10 text-amber-400'
-                    : 'border-slate-700/50 bg-slate-800/30 text-slate-400 hover:border-slate-600'
+                    ? 'border-accent-blue bg-accent-blue/5 text-accent-blue'
+                    : 'border-border bg-background-tertiary text-text-secondary hover:bg-gray-100'
                 )}
               >
                 {char.name}
@@ -217,7 +217,7 @@ export function QuestForm({
       {/* Skills */}
       {skills.length > 0 && (
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-text-primary mb-2">
             <Zap className="w-4 h-4 inline mr-1" />
             Навички
           </label>
@@ -235,8 +235,8 @@ export function QuestForm({
                 className={cn(
                   'px-3 py-1.5 rounded-lg border text-sm transition-all',
                   formData.skillIds.includes(skill.id)
-                    ? 'border-purple-500 bg-purple-500/10 text-purple-400'
-                    : 'border-slate-700/50 bg-slate-800/30 text-slate-400 hover:border-slate-600'
+                    ? 'border-accent-purple bg-accent-purple/5 text-accent-purple'
+                    : 'border-border bg-background-tertiary text-text-secondary hover:bg-gray-100'
                 )}
               >
                 {skill.name}
@@ -247,10 +247,10 @@ export function QuestForm({
       )}
 
       {/* XP Preview */}
-      <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
+      <div className="bg-accent-blue/5 border border-accent-blue/20 rounded-lg p-4">
         <div className="flex items-center justify-between">
-          <span className="text-slate-300">Очікувана нагорода:</span>
-          <span className="text-2xl font-bold text-amber-400">+{previewXp} XP</span>
+          <span className="text-text-primary">Очікувана нагорода:</span>
+          <span className="text-2xl font-bold text-accent-blue">+{previewXp} XP</span>
         </div>
       </div>
 

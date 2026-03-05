@@ -35,12 +35,12 @@ export function QuestCard({
   };
 
   return (
-    <Card variant="glass" className="hover:border-amber-600/40 transition-all duration-300">
+    <Card className="hover:shadow-notion-md transition-all duration-200">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <CardTitle className="text-lg">{quest.title}</CardTitle>
-            <p className="text-sm text-slate-400 mt-1 line-clamp-2">
+            <p className="text-sm text-text-secondary mt-1 line-clamp-2">
               {quest.description || 'Опис відсутній'}
             </p>
           </div>
@@ -48,7 +48,7 @@ export function QuestCard({
             <Badge variant={getStatusBadgeVariant(quest.status)}>
               {statusLabels[quest.status]}
             </Badge>
-            <span className="text-amber-400 text-sm font-medium">
+            <span className="text-accent-blue text-sm font-medium">
               {difficultyEmojis[quest.difficulty]}
             </span>
           </div>
@@ -57,7 +57,7 @@ export function QuestCard({
 
       <CardContent className="space-y-3">
         {/* Meta info */}
-        <div className="flex flex-wrap gap-3 text-sm text-slate-400">
+        <div className="flex flex-wrap gap-3 text-sm text-text-secondary">
           {/* Quest type */}
           <span className="flex items-center gap-1">
             <Star className="w-4 h-4" />
@@ -82,7 +82,7 @@ export function QuestCard({
 
           {/* Deadline */}
           {quest.deadline && quest.status === 'active' && (
-            <span className="flex items-center gap-1 text-yellow-400">
+            <span className="flex items-center gap-1 text-accent-purple">
               <Clock className="w-4 h-4" />
               {getTimeRemaining(quest.deadline)}
             </span>
@@ -91,14 +91,14 @@ export function QuestCard({
 
         {/* XP Reward */}
         <div className="flex items-center justify-between text-sm">
-          <span className="text-slate-400">Нагорода:</span>
-          <span className="text-amber-400 font-semibold">+{quest.xpReward} XP</span>
+          <span className="text-text-secondary">Нагорода:</span>
+          <span className="text-accent-blue font-semibold">+{quest.xpReward} XP</span>
         </div>
 
         {/* Progress bar for active quests with deadline */}
         {quest.status === 'active' && quest.deadline && (
           <div className="mt-2">
-            <div className="text-xs text-slate-500 mb-1">
+            <div className="text-xs text-text-muted mb-1">
               Залишилось: {getTimeRemaining(quest.deadline)}
             </div>
           </div>
@@ -106,7 +106,7 @@ export function QuestCard({
       </CardContent>
 
       <CardFooter className="justify-between">
-        <span className="text-xs text-slate-500">
+        <span className="text-xs text-text-muted">
           {formatDate(quest.createdAt)}
         </span>
         

@@ -67,10 +67,10 @@ export default function CharacterPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950">
+      <div className="min-h-screen bg-background-primary">
         <Header title="Персонаж" />
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-amber-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent-blue"></div>
         </div>
       </div>
     );
@@ -78,9 +78,9 @@ export default function CharacterPage() {
 
   if (!userData) {
     return (
-      <div className="min-h-screen bg-slate-950">
+      <div className="min-h-screen bg-background-primary">
         <Header title="Персонаж" />
-        <div className="p-4 text-center text-slate-400">
+        <div className="p-4 text-center text-text-secondary">
           Не вдалося завантажити дані персонажа
         </div>
       </div>
@@ -88,10 +88,10 @@ export default function CharacterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-background-primary">
       <Header title="Персонаж" />
       
-      <main className="p-4 space-y-6">
+      <main className="p-4 space-y-6 max-w-lg mx-auto">
         {/* Character Stats */}
         <CharacterStats
           user={userData}
@@ -101,7 +101,7 @@ export default function CharacterPage() {
         />
 
         {/* Skills Section */}
-        <Card variant="glass">
+        <Card>
           <CardHeader>
             <CardTitle className="text-lg">Навички</CardTitle>
           </CardHeader>
@@ -115,11 +115,11 @@ export default function CharacterPage() {
                   return (
                     <div key={skill.id} className="space-y-1">
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-200 font-medium">{skill.name}</span>
+                        <span className="font-medium text-text-primary">{skill.name}</span>
                         <Badge variant="warning">Рівень {skill.level}</Badge>
                       </div>
                       <ProgressBar value={progress} />
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-text-muted">
                         {skill.xp} / {xpForNextLevel} XP
                       </p>
                     </div>
@@ -127,7 +127,7 @@ export default function CharacterPage() {
                 })}
               </div>
             ) : (
-              <p className="text-slate-400 text-center py-4">
+              <p className="text-text-secondary text-center py-4">
                 Навички ще не створені
               </p>
             )}
