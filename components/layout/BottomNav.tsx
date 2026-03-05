@@ -7,24 +7,24 @@ import { Scroll, User, MapPin, Users } from 'lucide-react';
 
 const navItems = [
   {
+    href: '/character',
+    label: 'Герой',
+    icon: User,
+  },
+  {
     href: '/quests',
     label: 'Квести',
     icon: Scroll,
   },
   {
-    href: '/character',
-    label: 'Персонаж',
-    icon: User,
+    href: '/characters',
+    label: 'Персонажі',
+    icon: Users,
   },
   {
     href: '/locations',
     label: 'Локації',
     icon: MapPin,
-  },
-  {
-    href: '/characters',
-    label: 'Герої',
-    icon: Users,
   },
 ];
 
@@ -37,9 +37,7 @@ export function BottomNav() {
       <div className="flex items-center justify-around h-16 px-2 max-w-lg mx-auto">
         {navItems.map((item) => {
           // Use exact match to avoid /character matching /characters
-          const isActive = pathname === item.href ||
-            (item.href === '/characters' && pathname === '/characters') ||
-            (item.href === '/character' && pathname === '/character');
+          const isActive = pathname === item.href;
           const Icon = item.icon;
 
           return (

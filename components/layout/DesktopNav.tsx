@@ -9,24 +9,24 @@ import { useRouter } from 'next/navigation';
 
 const navItems = [
   {
+    href: '/character',
+    label: 'Герой',
+    icon: User,
+  },
+  {
     href: '/quests',
     label: 'Квести',
     icon: Scroll,
   },
   {
-    href: '/character',
-    label: 'Персонаж',
-    icon: User,
+    href: '/characters',
+    label: 'Персонажі',
+    icon: Users,
   },
   {
     href: '/locations',
     label: 'Локації',
     icon: MapPin,
-  },
-  {
-    href: '/characters',
-    label: 'Герої',
-    icon: Users,
   },
 ];
 
@@ -77,13 +77,8 @@ export function DesktopNav() {
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1">
         {navItems.map((item) => {
-          // Use exact match or check if pathname equals the href
-          // For /characters page, we need to make sure /character doesn't match
-          const isActive = pathname === item.href || 
-            (item.href !== '/' && pathname.startsWith(item.href + '/')) ||
-            // Special case: /characters should not match /character
-            (item.href === '/characters' && pathname === '/characters') ||
-            (item.href === '/character' && pathname === '/character');
+          // Use exact match to avoid /character matching /characters
+          const isActive = pathname === item.href;
           const Icon = item.icon;
 
           return (
