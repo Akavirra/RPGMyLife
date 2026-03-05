@@ -15,6 +15,13 @@
       "when": 1772381110671,
       "tag": "0001_fresh_venom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772734377929,
+      "tag": "0002_freezing_chameleon",
+      "breakpoints": true
     }
   ]
 }

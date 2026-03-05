@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Scroll, User, MapPin, Users } from 'lucide-react';
+import { Scroll, User, MapPin, Users, Swords } from 'lucide-react';
 
 const navItems = [
   {
@@ -15,6 +15,11 @@ const navItems = [
     href: '/quests',
     label: 'Квести',
     icon: Scroll,
+  },
+  {
+    href: '/guilds',
+    label: 'Гільдії',
+    icon: Swords,
   },
   {
     href: '/characters',

@@ -69,6 +69,19 @@ export const characters = pgTable('characters', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
+// Guilds table - player groups/teams
+export const guilds = pgTable('guilds', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+  description: text('description'),
+  imageUrl: text('image_url'),
+  level: integer('level').notNull().default(1),
+  xp: integer('xp').notNull().default(0),
+  memberCount: integer('member_count').notNull().default(1),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
 // Quests table - core entity
 export const quests = pgTable('quests', {
   id: serial('id').primaryKey(),
@@ -122,6 +135,8 @@ export type Location = typeof locations.$inferSelect;
 export type NewLocation = typeof locations.$inferInsert;
 export type Character = typeof characters.$inferSelect;
 export type NewCharacter = typeof characters.$inferInsert;
+export type Guild = typeof guilds.$inferSelect;
+export type NewGuild = typeof guilds.$inferInsert;
 export type Quest = typeof quests.$inferSelect;
 export type NewQuest = typeof quests.$inferInsert;
 export type QuestCharacter = typeof questCharacters.$inferSelect;
