@@ -77,7 +77,13 @@ export function DesktopNav() {
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1">
         {navItems.map((item) => {
-          const isActive = pathname.startsWith(item.href);
+          // Use exact match or check if pathname equals the href
+          // For /characters page, we need to make sure /character doesn't match
+          const isActive = pathname === item.href || 
+            (item.href !== '/' && pathname.startsWith(item.href + '/')) ||
+            // Special case: /characters should not match /character
+            (item.href === '/characters' && pathname === '/characters') ||
+            (item.href === '/character' && pathname === '/character');
           const Icon = item.icon;
 
           return (
