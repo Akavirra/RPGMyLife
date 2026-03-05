@@ -30,7 +30,6 @@ const config: Config = {
           '2xl': '1400px',
         },
       },
-    extend: {
       colors: {
         // Light theme backgrounds
         background: {
