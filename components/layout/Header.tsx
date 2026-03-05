@@ -65,7 +65,7 @@ export function Header({
             <>
               {/* Desktop: Show home link and user info */}
               <Link
-                href="/quests"
+                href="/"
                 className="hidden lg:flex items-center gap-2 px-3 py-1.5 text-text-secondary hover:text-accent-blue transition-colors rounded-lg hover:bg-background-tertiary"
                 title="Головна"
               >

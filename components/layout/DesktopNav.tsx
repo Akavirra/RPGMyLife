@@ -3,11 +3,16 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Scroll, User, MapPin, Users, Swords, LogOut } from 'lucide-react';
+import { Scroll, User, MapPin, Users, Swords, LogOut, Home } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useRouter } from 'next/navigation';
 
 const navItems = [
+  {
+    href: '/',
+    label: 'Головна',
+    icon: Home,
+  },
   {
     href: '/character',
     label: 'Герой',
