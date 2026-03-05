@@ -26,6 +26,7 @@ export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash').notNull(),
+  salt: text('salt'),
   username: text('username'),
   firstName: text('first_name').notNull(),
   avatarUrl: text('avatar_url'),

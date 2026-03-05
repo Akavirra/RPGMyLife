@@ -78,24 +78,11 @@ export default async function HomePage() {
     }
   }
 
-  // If not logged in, show welcome screen with login form
+  // If not logged in, show login form only
   if (!userData) {
     return (
-      <div className="min-h-screen bg-slate-950">
-        <Header title="Life RPG" />
-        
-        <div className="p-6 flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
-          <div className="text-center space-y-6 mb-8">
-            <h1 className="text-4xl font-bold text-amber-400 font-cinzel">
-              Life RPG
-            </h1>
-            <p className="text-slate-400 max-w-xs mx-auto">
-              Перетвори своє життя на пригоду. Створюй квести, розвивай навички, досягай цілей.
-            </p>
-          </div>
-          
-          <LoginForm />
-        </div>
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+        <LoginForm />
       </div>
     );
   }

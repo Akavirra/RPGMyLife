@@ -8,18 +8,25 @@ const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || 'default-secret-change-me'
 );
 
-// Password hashing using Web Crypto API (SHA-256)
-async function hashPassword(password: string): Promise<string> {
+// Generate a random salt
+function generateSalt(): string {
+  const array = new Uint8Array(16);
+  crypto.getRandomValues(array);
+  return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Password hashing using Web Crypto API with salt
+async function hashPassword(password: string, salt: string): Promise<string> {
   const encoder = new TextEncoder();
-  const data = encoder.encode(password);
+  const data = encoder.encode(password + salt);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Verify password
-async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  const passwordHash = await hashPassword(password);
+// Verify password with salt
+async function verifyPassword(password: string, hash: string, salt: string): Promise<boolean> {
+  const passwordHash = await hashPassword(password, salt);
   return passwordHash === hash;
 }
 
@@ -52,7 +59,8 @@ export async function registerUser(
   firstName: string,
   username?: string
 ): Promise<{ user: any; isNew: boolean }> {
-  const passwordHash = await hashPassword(password);
+  const salt = generateSalt();
+  const passwordHash = await hashPassword(password, salt);
   
   // Check if user already exists
   const existingUser = await db.query.users.findFirst({
@@ -68,6 +76,7 @@ export async function registerUser(
     .values({
       email,
       passwordHash,
+      salt,
       username: username || null,
       firstName,
       level: 1,
@@ -87,11 +96,11 @@ export async function loginUser(
     where: eq(users.email, email),
   });
 
-  if (!user) {
+  if (!user || !user.salt) {
     return null;
   }
 
-  const isValid = await verifyPassword(password, user.passwordHash);
+  const isValid = await verifyPassword(password, user.passwordHash, user.salt);
   if (!isValid) {
     return null;
   }
