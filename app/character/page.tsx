@@ -91,7 +91,7 @@ export default function CharacterPage() {
     <div className="min-h-screen bg-background-primary">
       <Header title="Персонаж" />
       
-      <main className="p-4 space-y-6 max-w-lg mx-auto">
+      <main className="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 max-w-4xl mx-auto">
         {/* Character Stats */}
         <CharacterStats
           user={userData}
@@ -103,23 +103,23 @@ export default function CharacterPage() {
         {/* Skills Section */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Навички</CardTitle>
+            <CardTitle className="text-lg md:text-xl">Навички</CardTitle>
           </CardHeader>
           <CardContent>
             {skillData.length > 0 ? (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 {skillData.map((skill) => {
                   const xpForNextLevel = (skill.level + 1) * 100;
                   const progress = (skill.xp / xpForNextLevel) * 100;
                   
                   return (
-                    <div key={skill.id} className="space-y-1">
+                    <div key={skill.id} className="space-y-2 p-4 bg-background-tertiary rounded-lg">
                       <div className="flex justify-between items-center">
                         <span className="font-medium text-text-primary">{skill.name}</span>
                         <Badge variant="warning">Рівень {skill.level}</Badge>
                       </div>
                       <ProgressBar value={progress} />
-                      <p className="text-xs text-text-muted">
+                      <p className="text-sm text-text-muted">
                         {skill.xp} / {xpForNextLevel} XP
                       </p>
                     </div>

@@ -92,15 +92,18 @@ export default function QuestsPage() {
         title="Квести"
         rightContent={
           <Link href="/quests/new">
-            <Button size="sm">
+            <Button size="sm" className="hidden md:flex">
               <Plus className="w-4 h-4 mr-1" />
-              Новий
+              Новий квест
+            </Button>
+            <Button size="sm" className="md:hidden">
+              <Plus className="w-4 h-4" />
             </Button>
           </Link>
         }
       />
 
-      <main className="p-4 space-y-4 max-w-lg mx-auto">
+      <main className="p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6 max-w-5xl mx-auto">
         {/* Filters */}
         <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
           {filters.map((f) => (
@@ -124,7 +127,7 @@ export default function QuestsPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent-blue"></div>
           </div>
         ) : quests.length > 0 ? (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
             {quests.map((quest) => (
               <QuestCard
                 key={quest.id}

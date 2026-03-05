@@ -7,7 +7,29 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  // Enable responsive variants
+  corePlugins: {
+    container: false,
+  },
   theme: {
+    extend: {
+      // Custom container for responsive layouts
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '1rem',
+          sm: '1.5rem',
+          lg: '2rem',
+          xl: '3rem',
+        },
+        screens: {
+          sm: '640px',
+          md: '768px',
+          lg: '1024px',
+          xl: '1280px',
+          '2xl': '1400px',
+        },
+      },
     extend: {
       colors: {
         // Light theme backgrounds
@@ -48,12 +70,20 @@ const config: Config = {
         raleway: ['Raleway', 'sans-serif'],
       },
       fontSize: {
+        // Mobile-first base sizes
         'display': ['2.25rem', { lineHeight: '2.75rem', fontWeight: '700' }],
         'h1': ['2rem', { lineHeight: '2.5rem', fontWeight: '700' }],
         'h2': ['1.5rem', { lineHeight: '2rem', fontWeight: '600' }],
         'h3': ['1.25rem', { lineHeight: '1.75rem', fontWeight: '600' }],
         'body': ['1rem', { lineHeight: '1.5rem', fontWeight: '400' }],
         'small': ['0.875rem', { lineHeight: '1.25rem', fontWeight: '400' }],
+        // Desktop sizes (lg and above)
+        'display-lg': ['3rem', { lineHeight: '3.5rem', fontWeight: '700' }],
+        'h1-lg': ['2.5rem', { lineHeight: '3rem', fontWeight: '700' }],
+        'h2-lg': ['1.875rem', { lineHeight: '2.25rem', fontWeight: '600' }],
+        'h3-lg': ['1.5rem', { lineHeight: '2rem', fontWeight: '600' }],
+        'body-lg': ['1.125rem', { lineHeight: '1.75rem', fontWeight: '400' }],
+        'small-lg': ['1rem', { lineHeight: '1.5rem', fontWeight: '400' }],
       },
       boxShadow: {
         // Notion-style subtle shadows
@@ -65,9 +95,22 @@ const config: Config = {
       borderRadius: {
         'notion': '8px',
       },
+      // Responsive spacing for desktop
       spacing: {
         '18': '4.5rem',
         '22': '5.5rem',
+        '88': '22rem',
+        '100': '25rem',
+        '120': '30rem',
+      },
+      // Desktop max widths
+      maxWidth: {
+        'app': '1200px',
+        'content': '900px',
+        'sidebar': '280px',
+      },
+      minHeight: {
+        'screen-nav': 'calc(100vh - 4rem)',
       },
       transitionTimingFunction: {
         // Notion-style easing

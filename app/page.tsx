@@ -81,7 +81,7 @@ export default async function HomePage() {
   // If not logged in, show login form only
   if (!userData) {
     return (
-      <div className="min-h-screen bg-background-primary flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background-primary flex items-center justify-center p-4 md:p-8">
         <LoginForm />
       </div>
     );
@@ -91,7 +91,7 @@ export default async function HomePage() {
     <div className="min-h-screen bg-background-primary">
       <Header title="Life RPG" />
       
-      <main className="p-4 space-y-6 max-w-lg mx-auto">
+      <main className="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 max-w-4xl mx-auto">
         {/* Character Stats */}
         <CharacterStats
           user={userData}
@@ -101,11 +101,12 @@ export default async function HomePage() {
         />
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           <Link href="/quests/new">
             <Button className="w-full" size="lg">
               <Plus className="w-5 h-5 mr-2" />
-              Новий квест
+              <span className="hidden sm:inline">Новий квест</span>
+              <span className="sm:hidden">Новий</span>
             </Button>
           </Link>
           <Link href="/quests">
@@ -114,12 +115,22 @@ export default async function HomePage() {
               Всі квести
             </Button>
           </Link>
+          <Link href="/locations">
+            <Button variant="outline" className="w-full" size="lg">
+              Локації
+            </Button>
+          </Link>
+          <Link href="/characters">
+            <Button variant="outline" className="w-full" size="lg">
+              Герої
+            </Button>
+          </Link>
         </div>
 
         {/* Active Quests Preview */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg">
+            <CardTitle className="text-lg md:text-xl">
               Активні квести
             </CardTitle>
             <Link href="/quests">
@@ -130,7 +141,7 @@ export default async function HomePage() {
           </CardHeader>
           <CardContent>
             {activeQuests.length > 0 ? (
-              <div className="space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {activeQuests.slice(0, 3).map((quest) => (
                   <QuestCard key={quest.id} quest={quest} />
                 ))}

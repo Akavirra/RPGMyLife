@@ -42,16 +42,16 @@ export function QuestCard({
   };
 
   return (
-    <Card hover className={quest.status === 'completed' ? 'opacity-75' : ''}>
+    <Card hover className={cn('transition-all duration-200 hover:shadow-notion-lg', quest.status === 'completed' ? 'opacity-75' : '')}>
       <CardHeader>
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
           <div className="flex-1">
-            <CardTitle className="text-lg">{quest.title}</CardTitle>
-            <p className="text-sm text-text-secondary mt-1 line-clamp-2">
+            <CardTitle className="text-lg md:text-xl">{quest.title}</CardTitle>
+            <p className="text-sm md:text-base text-text-secondary mt-1 line-clamp-2 md:line-clamp-3">
               {quest.description || 'Опис відсутній'}
             </p>
           </div>
-          <div className="flex flex-col items-end gap-2 ml-4">
+          <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 sm:ml-4">
             <Badge variant={statusColors[quest.status] as any}>
               {statusLabels[quest.status]}
             </Badge>
@@ -64,9 +64,9 @@ export function QuestCard({
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-3 md:space-y-4">
         {/* Meta info */}
-        <div className="flex flex-wrap gap-3 text-sm text-text-secondary">
+        <div className="flex flex-wrap gap-3 md:gap-4 text-sm md:text-base text-text-secondary">
           {/* Quest type */}
           <span className="flex items-center gap-1">
             <Star className="w-4 h-4 text-accent-purple" />

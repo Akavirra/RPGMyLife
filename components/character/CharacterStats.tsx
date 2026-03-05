@@ -38,23 +38,23 @@ export function CharacterStats({
   const nextLevelXp = getXpForNextLevel(user.level);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 md:space-y-8">
       {/* Avatar and Level - Enhanced with gamification */}
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
         <div className="relative">
           {user.avatarUrl ? (
             <img
               src={user.avatarUrl}
               alt={user.firstName}
-              className="w-24 h-24 rounded-full border-4 border-accent-blue/30 object-cover"
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-accent-blue/30 object-cover"
             />
           ) : (
-            <div className="w-24 h-24 rounded-full bg-background-tertiary border-4 border-accent-blue/30 flex items-center justify-center">
-              <User className="w-12 h-12 text-accent-blue" />
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-background-tertiary border-4 border-accent-blue/30 flex items-center justify-center">
+              <User className="w-12 h-12 md:w-14 md:h-14 text-accent-blue" />
             </div>
           )}
           {/* Level Badge with glow */}
-          <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-br from-accent-blue to-accent-purple rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg level-up">
+          <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-accent-blue to-accent-purple rounded-full flex items-center justify-center text-white font-bold text-lg md:text-xl shadow-lg level-up">
             {user.level}
           </div>
           {/* Level Title Badge */}
@@ -66,14 +66,14 @@ export function CharacterStats({
           </div>
         </div>
         
-        <div className="flex-1">
-          <h2 className="text-2xl font-bold text-text-primary">
+        <div className="flex-1 text-center sm:text-left">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary">
             {user.firstName}
           </h2>
           {user.username && (
             <p className="text-text-secondary">@{user.username}</p>
           )}
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
             <Badge variant="purple">
               <Zap className="w-3 h-3 mr-1" />
               {user.totalXp} XP
@@ -94,7 +94,7 @@ export function CharacterStats({
       </Card>
 
       {/* Stats Grid - Enhanced with icons and colors */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card hover>
           <CardContent className="pt-4 flex items-center gap-4">
             <div className="w-12 h-12 bg-accent-blue/10 rounded-xl flex items-center justify-center">

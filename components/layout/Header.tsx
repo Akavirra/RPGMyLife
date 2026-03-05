@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { ChevronLeft, Menu, LogOut } from 'lucide-react';
+import { ChevronLeft, Menu, LogOut, Home } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthProvider';
@@ -37,23 +37,24 @@ export function Header({
         className
       )}
     >
-      <div className="flex items-center justify-between h-14 px-4 max-w-lg mx-auto">
+      <div className="flex items-center justify-between h-14 px-4 lg:px-6 max-w-app mx-auto">
         {/* Left section */}
         <div className="flex items-center gap-2">
           {showBack && (
             <button
               onClick={() => router.back()}
-              className="p-2 -ml-2 text-text-secondary hover:text-accent-blue transition-colors"
+              className="p-2 -ml-2 text-text-secondary hover:text-accent-blue transition-colors rounded-lg hover:bg-background-tertiary"
+              aria-label="Назад"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
           )}
           {showMenu && (
-            <button className="p-2 -ml-2 text-text-secondary hover:text-accent-blue transition-colors">
+            <button className="p-2 -ml-2 text-text-secondary hover:text-accent-blue transition-colors rounded-lg hover:bg-background-tertiary">
               <Menu className="w-6 h-6" />
             </button>
           )}
-          <h1 className="text-xl font-bold text-text-primary">
+          <h1 className="text-xl md:text-2xl font-bold text-text-primary">
             {title}
           </h1>
         </div>
@@ -61,13 +62,24 @@ export function Header({
         {/* Right section */}
         <div className="flex items-center gap-2">
           {user && (
-            <button
-              onClick={handleLogout}
-              className="p-2 text-text-secondary hover:text-accent-blue transition-colors"
-              title="Вийти"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
+            <>
+              {/* Desktop: Show home link and user info */}
+              <Link
+                href="/quests"
+                className="hidden lg:flex items-center gap-2 px-3 py-1.5 text-text-secondary hover:text-accent-blue transition-colors rounded-lg hover:bg-background-tertiary"
+                title="Головна"
+              >
+                <Home className="w-5 h-5" />
+                <span className="text-sm">Головна</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="p-2 text-text-secondary hover:text-accent-blue transition-colors rounded-lg hover:bg-background-tertiary"
+                title="Вийти"
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
+            </>
           )}
           {rightContent && <div className="flex items-center">{rightContent}</div>}
         </div>

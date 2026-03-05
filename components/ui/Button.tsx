@@ -14,11 +14,11 @@ const buttonVariants = cva(
         success: 'bg-accent-green text-white hover:bg-opacity-90',
       },
       size: {
-        default: 'h-10 px-4 py-2',
-        sm: 'h-8 px-3 text-xs',
-        lg: 'h-12 px-6 text-base',
-        xl: 'h-14 px-8 text-lg',
-        icon: 'h-10 w-10',
+        default: 'h-10 px-4 py-2 md:h-11 md:px-5 md:py-2.5',
+        sm: 'h-8 px-3 text-xs md:h-9 md:px-4',
+        lg: 'h-12 px-6 text-base md:h-14 md:px-8',
+        xl: 'h-14 px-8 text-lg md:h-16 md:px-10',
+        icon: 'h-10 w-10 md:h-11 md:w-11',
       },
     },
     defaultVariants: {

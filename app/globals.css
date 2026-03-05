@@ -595,4 +595,106 @@
   .glow-purple {
     box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
   }
+
+  /* ========== RESPONSIVE UTILITIES ========== */
+  
+  /* Desktop container */
+  .container-app {
+    @apply max-w-app mx-auto px-4 lg:px-6 xl:px-8;
+  }
+
+  /* Desktop layout */
+  .desktop-layout {
+    @apply flex gap-6;
+  }
+
+  .desktop-main {
+    @apply flex-1 min-w-0;
+  }
+
+  .desktop-sidebar {
+    @apply w-sidebar hidden lg:block;
+  }
+
+  /* Responsive text utilities */
+  .text-responsive {
+    @apply text-body md:text-body-lg;
+  }
+
+  .text-heading {
+    @apply text-h2 md:text-h2-lg;
+  }
+
+  /* Responsive spacing */
+  .p-responsive {
+    @apply p-4 md:p-6 lg:p-8;
+  }
+
+  .gap-responsive {
+    @apply gap-4 md:gap-6 lg:gap-8;
+  }
+
+  /* Desktop card grid */
+  .card-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6;
+  }
+
+  /* Hide on mobile, show on desktop */
+  .desktop-only {
+    @apply hidden lg:flex;
+  }
+
+  /* Show on mobile, hide on desktop */
+  .mobile-only {
+    @apply flex lg:hidden;
+  }
+
+  /* Responsive card height */
+  .card-interactive {
+    @apply transition-all duration-200 hover:shadow-notion-lg hover:-translate-y-1 cursor-pointer;
+  }
+}
+
+/* ========== DESKTOP MEDIA QUERIES ========== */
+@media (min-width: 1024px) {
+  /* Desktop body styles */
+  body {
+    background: linear-gradient(to bottom, #FAFBFC, #F4F5F7);
+    min-height: 100vh;
+  }
+
+  /* Desktop scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #F3F4F6;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+  }
+
+  /* Desktop focus styles */
+  :focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+  }
+
+  /* Desktop card hover */
+  .card-notion:hover {
+    @apply shadow-notion-lg;
+  }
+}
+
+/* ========== KEYBOARD NAVIGATION SUPPORT ========== */
+@media (hover: none) and (pointer: coarse) {
+  /* Mobile/touch specific styles - already defined above */
 }

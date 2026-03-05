@@ -37,38 +37,38 @@ export function LoginForm() {
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md md:max-w-lg p-2 md:p-4">
       <CardHeader>
-        <CardTitle className="text-center">
+        <CardTitle className="text-center text-xl md:text-2xl">
           {isLogin ? 'Вхід в систему' : 'Реєстрація'}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
           {!isLogin && (
             <>
               <div>
-                <label className="block text-sm text-text-secondary mb-1">
+                <label className="block text-sm md:text-base text-text-secondary mb-1 md:mb-2">
                   Ім'я
                 </label>
                 <input
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="input-notion"
+                  className="input-notion text-base md:text-lg"
                   required={!isLogin}
                   placeholder="Ваше ім'я"
                 />
               </div>
               <div>
-                <label className="block text-sm text-text-secondary mb-1">
+                <label className="block text-sm md:text-base text-text-secondary mb-1 md:mb-2">
                   Username (необов'язково)
                 </label>
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="input-notion"
+                  className="input-notion text-base md:text-lg"
                   placeholder="username"
                 />
               </div>
@@ -76,28 +76,28 @@ export function LoginForm() {
           )}
           
           <div>
-            <label className="block text-sm text-text-secondary mb-1">
+            <label className="block text-sm md:text-base text-text-secondary mb-1 md:mb-2">
               Email
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="input-notion"
+              className="input-notion text-base md:text-lg"
               required
               placeholder="email@example.com"
             />
           </div>
           
           <div>
-            <label className="block text-sm text-text-secondary mb-1">
+            <label className="block text-sm md:text-base text-text-secondary mb-1 md:mb-2">
               Пароль
             </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input-notion"
+              className="input-notion text-base md:text-lg"
               required
               placeholder="••••••••"
             />

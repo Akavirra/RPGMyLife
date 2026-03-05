@@ -112,14 +112,21 @@ export default function LocationsPage() {
       <Header 
         title="Локації"
         rightContent={
-          <Button size="sm" onClick={openNewForm}>
+          <Button size="sm" onClick={openNewForm} className="hidden md:flex">
             <Plus className="w-4 h-4 mr-1" />
-            Нова
+            Нова локація
           </Button>
         }
       />
       
-      <main className="p-4 space-y-4 max-w-lg mx-auto">
+      <main className="p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6 max-w-5xl mx-auto">
+        {/* Mobile button - visible only on small screens */}
+        <div className="md:hidden">
+          <Button size="sm" onClick={openNewForm}>
+            <Plus className="w-4 h-4 mr-1" />
+            Нова
+          </Button>
+        </div>
         {/* New/Edit Form */}
         {showForm && (
           <Card>
@@ -177,9 +184,9 @@ export default function LocationsPage() {
 
         {/* Locations List */}
         {locations.length > 0 ? (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
             {locations.map((location) => (
-              <Card key={location.id}>
+              <Card key={location.id} className="hover:shadow-notion-md transition-shadow">
                 <CardContent className="py-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">

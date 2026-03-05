@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/components/AuthProvider';
 import { BottomNav } from '@/components/layout/BottomNav';
+import { DesktopNav } from '@/components/layout/DesktopNav';
 import './globals.css';
 
 const inter = Inter({
@@ -31,9 +32,17 @@ export default async function RootLayout({
     <html lang="uk" className={inter.variable}>
       <body className="font-sans bg-background-primary text-text-primary min-h-screen antialiased">
         <AuthProvider>
-          <div className={isAuthenticated ? 'pb-20' : ''}>
-            {children}
+          <div className={isAuthenticated ? 'lg:flex' : ''}>
+            {/* Desktop navigation - sidebar */}
+            {isAuthenticated && <DesktopNav />}
+            
+            {/* Main content area */}
+            <div className={isAuthenticated ? 'flex-1 lg:min-h-screen lg:pb-0 pb-20' : ''}>
+              {children}
+            </div>
           </div>
+          
+          {/* Mobile bottom navigation - hidden on desktop */}
           {isAuthenticated && <BottomNav />}
         </AuthProvider>
       </body>
