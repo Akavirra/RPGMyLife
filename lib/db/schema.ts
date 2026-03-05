@@ -32,6 +32,7 @@ export const users = pgTable('users', {
   avatarUrl: text('avatar_url'),
   level: integer('level').notNull().default(1),
   totalXp: integer('total_xp').notNull().default(0),
+  journalPasswordHash: text('journal_password_hash'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
@@ -126,6 +127,18 @@ export const activityLog = pgTable('activity_log', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
+// Journal table - personal diary entries
+export const journal = pgTable('journal', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  title: text('title').notNull(),
+  content: text('content').notNull(),
+  mood: text('mood'), // happy, neutral, sad, excited, tired, etc.
+  tags: text('tags').array(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
 // Type exports for TypeScript
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -145,6 +158,8 @@ export type QuestSkill = typeof questSkills.$inferSelect;
 export type NewQuestSkill = typeof questSkills.$inferInsert;
 export type ActivityLogEntry = typeof activityLog.$inferSelect;
 export type NewActivityLogEntry = typeof activityLog.$inferInsert;
+export type JournalEntry = typeof journal.$inferSelect;
+export type NewJournalEntry = typeof journal.$inferInsert;
 
 export type QuestStatus = 'draft' | 'active' | 'completed' | 'failed';
 export type QuestType = 'once' | 'daily' | 'weekly' | 'chain';

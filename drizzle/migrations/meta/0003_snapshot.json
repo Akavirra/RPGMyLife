@@ -1,6 +1,6 @@
 {
-  "id": "c16a68ca-e22d-4211-9622-5e2ee470c743",
-  "prevId": "980b2269-f683-411d-bafa-be1a99fc55b9",
+  "id": "9a3735d1-bfea-4707-bcca-9965c3909422",
+  "prevId": "c16a68ca-e22d-4211-9622-5e2ee470c743",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -221,6 +221,83 @@
         "guilds_user_id_users_id_fk": {
           "name": "guilds_user_id_users_id_fk",
           "tableFrom": "guilds",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.journal": {
+      "name": "journal",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mood": {
+          "name": "mood",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "journal_user_id_users_id_fk": {
+          "name": "journal_user_id_users_id_fk",
+          "tableFrom": "journal",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
@@ -705,6 +782,12 @@
           "notNull": true,
           "default": 0
         },
+        "journal_password_hash": {
+          "name": "journal_password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -746,10 +829,7 @@
         "quest_completed",
         "quest_failed",
         "level_up",
-        "skill_up",
-        "profile_updated",
-        "password_changed",
-        "avatar_updated"
+        "skill_up"
       ]
     },
     "public.quest_status": {

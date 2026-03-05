@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Scroll, MapPin, Users, Swords, LogOut, Home, User } from 'lucide-react';
+import { Scroll, MapPin, Users, Swords, LogOut, Home, User, BookOpen } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useRouter } from 'next/navigation';
 
@@ -32,6 +32,11 @@ const navItems = [
     href: '/locations',
     label: 'Локації',
     icon: MapPin,
+  },
+  {
+    href: '/journal',
+    label: 'Журнал',
+    icon: BookOpen,
   },
 ];
 
