@@ -4,7 +4,7 @@ import { quests, users, questSkills, activityLog, skills } from '@/lib/db/schema
 import { eq, and } from 'drizzle-orm';
 import { verifySessionToken } from '@/lib/auth';
 import { checkLevelUp, checkSkillLevelUp } from '@/lib/game/level-server';
-import { calculateXpReward, calculateFailurePenalty } from '@/lib/game/xp';
+import { calculateXpReward, calculateFailurePenalty, calculateDifficulty } from '@/lib/game/xp';
 
 // GET /api/quests/[id] - Get single quest
 export async function GET(
@@ -80,7 +80,20 @@ export async function PATCH(
     }
 
     const body = await request.json();
-    const { status, title, description, type, difficulty, deadline, locationId, parentQuestId } = body;
+    const { 
+      status, 
+      title, 
+      description, 
+      type, 
+      difficulty, 
+      deadline, 
+      locationId, 
+      guildId,
+      parentQuestId,
+      isInfinite,
+      durationMonths,
+      durationWeeks
+    } = body;
 
     // Handle quest completion
     if (status === 'completed' && quest.status === 'active') {
@@ -189,15 +202,25 @@ export async function PATCH(
     const updateData: Record<string, unknown> = {};
     if (title !== undefined) updateData.title = title;
     if (description !== undefined) updateData.description = description;
-    if (type !== undefined) updateData.type = type;
+    if (type !== undefined) {
+      updateData.type = type;
+      // Reset deadline when type changes to daily/weekly
+      if (type === 'daily' || type === 'weekly') {
+        updateData.deadline = null;
+      }
+    }
     if (difficulty !== undefined) {
       updateData.difficulty = difficulty;
       updateData.xpReward = calculateXpReward(difficulty, type || quest.type);
     }
     if (deadline !== undefined) updateData.deadline = deadline ? new Date(deadline) : null;
     if (locationId !== undefined) updateData.locationId = locationId;
+    if (guildId !== undefined) updateData.guildId = guildId;
     if (parentQuestId !== undefined) updateData.parentQuestId = parentQuestId;
     if (status !== undefined) updateData.status = status;
+    if (isInfinite !== undefined) updateData.isInfinite = isInfinite;
+    if (durationMonths !== undefined) updateData.durationMonths = durationMonths;
+    if (durationWeeks !== undefined) updateData.durationWeeks = durationWeeks;
 
     const [updatedQuest] = await db.update(quests)
       .set(updateData)

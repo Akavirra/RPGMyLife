@@ -7,40 +7,50 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import Link from 'next/link';
 import { Plus, Filter } from 'lucide-react';
-
-interface QuestData {
-  id: number;
-  title: string;
-  description: string | null;
-  status: string;
-  type: string;
-  difficulty: number;
-  xpReward: number;
-  deadline: string | null;
-  createdAt: string;
-}
+import type { Quest, Guild } from '@/lib/db/schema';
 
 export default function QuestsPage() {
-  const [quests, setQuests] = useState<QuestData[]>([]);
+  const [quests, setQuests] = useState<Quest[]>([]);
+  const [guilds, setGuilds] = useState<Guild[]>([]);
+  const [guildsMap, setGuildsMap] = useState<Record<number, Guild>>({});
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
 
   useEffect(() => {
-    fetchQuests();
+    fetchData();
   }, [filter]);
 
-  const fetchQuests = async () => {
+  const fetchData = async () => {
     try {
-      const statusParam = filter !== 'all' ? `&status=${filter}` : '';
-      const res = await fetch(`/api/quests?${statusParam}`, {
-        credentials: 'include',
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setQuests(data.quests || []);
+      let url = '/api/quests';
+      if (filter !== 'all') {
+        url += `?status=${filter}`;
+      }
+      const [questsRes, guildsRes] = await Promise.all([
+        fetch(url, {
+          credentials: 'include',
+        }),
+        fetch('/api/guilds', { credentials: 'include' }),
+      ]);
+
+      if (questsRes.ok) {
+        const questsData = await questsRes.json();
+        setQuests(questsData.quests || []);
+      }
+
+      if (guildsRes.ok) {
+        const guildsData = await guildsRes.json();
+        const guildsList = guildsData.guilds || [];
+        setGuilds(guildsList);
+        // Create a map for quick lookup
+        const map: Record<number, Guild> = {};
+        guildsList.forEach((g: Guild) => {
+          map[g.id] = g;
+        });
+        setGuildsMap(map);
       }
     } catch (error) {
-      console.error('Error fetching quests:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
@@ -55,7 +65,7 @@ export default function QuestsPage() {
         credentials: 'include',
       });
       if (res.ok) {
-        fetchQuests();
+        fetchData();
       }
     } catch (error) {
       console.error('Error completing quest:', error);
@@ -71,7 +81,7 @@ export default function QuestsPage() {
         credentials: 'include',
       });
       if (res.ok) {
-        fetchQuests();
+        fetchData();
       }
     } catch (error) {
       console.error('Error failing quest:', error);
@@ -131,7 +141,8 @@ export default function QuestsPage() {
             {quests.map((quest) => (
               <QuestCard
                 key={quest.id}
-                quest={quest}
+                quest={quest as any}
+                guild={quest.guildId ? guildsMap[quest.guildId] : null}
                 onComplete={() => handleComplete(quest.id)}
                 onFail={() => handleFail(quest.id)}
               />

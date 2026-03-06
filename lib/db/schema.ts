@@ -8,11 +8,12 @@ import {
   pgEnum,
   uniqueIndex,
   primaryKey,
+  boolean,
 } from 'drizzle-orm/pg-core';
 
 // Enums
 export const questStatusEnum = pgEnum('quest_status', ['draft', 'active', 'completed', 'failed']);
-export const questTypeEnum = pgEnum('quest_type', ['once', 'daily', 'weekly', 'chain']);
+export const questTypeEnum = pgEnum('quest_type', ['once', 'daily', 'weekly']);
 export const characterRelationEnum = pgEnum('character_relation', ['acquaintance', 'friend', 'family', 'enemy']);
 export const eventTypeEnum = pgEnum('event_type', [
   'quest_created',
@@ -97,7 +98,13 @@ export const quests = pgTable('quests', {
   difficulty: integer('difficulty').notNull().default(1), // 1-5
   xpReward: integer('xp_reward').notNull().default(0),
   deadline: timestamp('deadline'),
+  // Daily/Weekly quest settings
+  isInfinite: boolean('is_infinite').notNull().default(true),
+  durationMonths: integer('duration_months'),
+  durationWeeks: integer('duration_weeks'),
+  // Relations
   locationId: integer('location_id').references(() => locations.id, { onDelete: 'set null' }),
+  guildId: integer('guild_id').references(() => guilds.id, { onDelete: 'set null' }),
   parentQuestId: integer('parent_quest_id').references(() => quests.id, { onDelete: 'set null' }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   completedAt: timestamp('completed_at'),
@@ -165,6 +172,6 @@ export type JournalEntry = typeof journal.$inferSelect;
 export type NewJournalEntry = typeof journal.$inferInsert;
 
 export type QuestStatus = 'draft' | 'active' | 'completed' | 'failed';
-export type QuestType = 'once' | 'daily' | 'weekly' | 'chain';
+export type QuestType = 'once' | 'daily' | 'weekly';
 export type CharacterRelation = 'acquaintance' | 'friend' | 'family' | 'enemy';
 export type EventType = 'quest_created' | 'quest_completed' | 'quest_failed' | 'level_up' | 'skill_up';

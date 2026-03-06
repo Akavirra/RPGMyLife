@@ -5,13 +5,14 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { Button } from '@/components/ui/Button';
 import { getDifficultyLabel, getQuestTypeLabel } from '@/lib/game/xp';
 import { formatDate, getTimeRemaining, cn } from '@/lib/utils';
-import { Calendar, Clock, Star, MapPin, Users, Zap, CheckCircle, XCircle } from 'lucide-react';
-import type { Quest, Location, Character } from '@/lib/db/schema';
+import { Calendar, Clock, Star, MapPin, Users, Zap, CheckCircle, XCircle, Building2, Repeat } from 'lucide-react';
+import type { Quest, Location, Character, Guild } from '@/lib/db/schema';
 
 interface QuestCardProps {
   quest: Quest;
   location?: Location | null;
   characters?: Character[];
+  guild?: Guild | null;
   onComplete?: () => void;
   onFail?: () => void;
   isLoading?: boolean;
@@ -23,6 +24,7 @@ export function QuestCard({
   quest,
   location,
   characters = [],
+  guild,
   onComplete,
   onFail,
   isLoading = false,
@@ -41,12 +43,32 @@ export function QuestCard({
     failed: 'danger',
   };
 
+  // Check if this is a sub-quest
+  const isSubQuest = !!quest.parentQuestId;
+
+  // Check if this is a repeatable quest
+  const isRepeatable = quest.type === 'daily' || quest.type === 'weekly';
+
+  // Get duration text
+  const getDurationText = () => {
+    if (quest.isInfinite) {
+      return 'Безкінечно';
+    }
+    const parts = [];
+    if (quest.durationMonths) parts.push(`${quest.durationMonths} міс.`);
+    if (quest.durationWeeks) parts.push(`${quest.durationWeeks} тиж.`);
+    return parts.join(', ') || 'Обмежено';
+  };
+
   return (
-    <Card hover className={cn('transition-all duration-200 hover:shadow-notion-lg', quest.status === 'completed' ? 'opacity-75' : '')}>
+    <Card hover className={cn('transition-all duration-200 hover:shadow-notion-lg', quest.status === 'completed' ? 'opacity-75' : '', isSubQuest ? 'ml-4 border-l-4 border-l-accent-green' : '')}>
       <CardHeader>
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
           <div className="flex-1">
-            <CardTitle className="text-lg md:text-xl">{quest.title}</CardTitle>
+            <CardTitle className="text-lg md:text-xl">
+              {isSubQuest && <span className="text-accent-green text-xs mr-2">[ЕТАП]</span>}
+              {quest.title}
+            </CardTitle>
             <p className="text-sm md:text-base text-text-secondary mt-1 line-clamp-2 md:line-clamp-3">
               {quest.description || 'Опис відсутній'}
             </p>
@@ -71,13 +93,32 @@ export function QuestCard({
           <span className="flex items-center gap-1">
             <Star className="w-4 h-4 text-accent-purple" />
             {getQuestTypeLabel(quest.type)}
+            {isRepeatable && quest.isInfinite && (
+              <Repeat className="w-3 h-3 ml-1 text-accent-purple" />
+            )}
           </span>
+
+          {/* Duration for daily/weekly quests */}
+          {isRepeatable && (
+            <span className="flex items-center gap-1">
+              <Calendar className="w-4 h-4 text-accent-green" />
+              {getDurationText()}
+            </span>
+          )}
 
           {/* Location */}
           {location && (
             <span className="flex items-center gap-1">
               <MapPin className="w-4 h-4 text-accent-blue" />
               {location.name}
+            </span>
+          )}
+
+          {/* Guild */}
+          {guild && (
+            <span className="flex items-center gap-1">
+              <Building2 className="w-4 h-4 text-accent-orange" />
+              {guild.name}
             </span>
           )}
 

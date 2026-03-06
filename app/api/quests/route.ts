@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 import { quests, questSkills, questCharacters, activityLog } from '@/lib/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { verifySessionToken } from '@/lib/auth';
-import { calculateXpReward } from '@/lib/game/xp';
+import { calculateXpReward, calculateDifficulty } from '@/lib/game/xp';
 
 // GET /api/quests - Get all quests for user
 export async function GET(request: NextRequest) {
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
       query = db.query.quests.findMany({
         where: and(
           eq(quests.userId, session.userId),
-          eq(quests.type, type as 'once' | 'daily' | 'weekly' | 'chain')
+          eq(quests.type, type as 'once' | 'daily' | 'weekly')
         ),
       });
     }
@@ -78,16 +78,43 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { title, description, type, difficulty, deadline, locationId, parentQuestId, characterIds, skillIds } = body;
+    const { 
+      title, 
+      description, 
+      type, 
+      difficulty, 
+      deadline, 
+      locationId, 
+      guildId,
+      parentQuestId, 
+      characterIds, 
+      skillIds,
+      isInfinite,
+      durationMonths,
+      durationWeeks,
+      subQuests
+    } = body;
 
     if (!title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
     }
 
-    // Calculate XP reward based on difficulty and type
-    const xpReward = calculateXpReward(difficulty || 1, type || 'once');
+    // Determine if quest has limited duration
+    const isLimitedDuration = !isInfinite && (durationMonths || durationWeeks);
 
-    // Create quest
+    // Calculate difficulty based on various factors
+    const calculatedDifficulty = calculateDifficulty(difficulty || 1, {
+      linkedCharactersCount: characterIds?.length || 0,
+      hasLocation: !!locationId,
+      subQuestsCount: subQuests?.length || 0,
+      isLimitedDuration,
+      hasGuild: !!guildId,
+    });
+
+    // Calculate XP reward based on calculated difficulty and type
+    const xpReward = calculateXpReward(calculatedDifficulty, type || 'once');
+
+    // Create main quest
     const result = await db.insert(quests)
       .values({
         userId: session.userId,
@@ -95,15 +122,42 @@ export async function POST(request: NextRequest) {
         description: description || null,
         status: 'draft',
         type: type || 'once',
-        difficulty: difficulty || 1,
+        difficulty: calculatedDifficulty,
         xpReward,
-        deadline: deadline ? new Date(deadline) : null,
+        // Deadline is only for 'once' type quests
+        deadline: type === 'once' && deadline ? new Date(deadline) : null,
         locationId: locationId || null,
+        guildId: guildId || null,
         parentQuestId: parentQuestId || null,
+        // Daily/Weekly specific fields
+        isInfinite: isInfinite !== undefined ? isInfinite : true,
+        durationMonths: type !== 'once' ? (durationMonths || null) : null,
+        durationWeeks: type !== 'once' ? (durationWeeks || null) : null,
       })
       .returning();
 
     const newQuest = result[0];
+
+    // Create sub-quests (stages) for 'once' type quests
+    if (type === 'once' && subQuests && subQuests.length > 0) {
+      for (const subQuest of subQuests) {
+        const subXpReward = calculateXpReward(subQuest.difficulty || 1, 'once');
+        await db.insert(quests).values({
+          userId: session.userId,
+          title: subQuest.title,
+          description: subQuest.description || null,
+          status: 'draft',
+          type: 'once',
+          difficulty: subQuest.difficulty || 1,
+          xpReward: subXpReward,
+          deadline: subQuest.deadline ? new Date(subQuest.deadline) : null,
+          locationId: locationId || null,
+          guildId: guildId || null,
+          parentQuestId: newQuest.id,
+          isInfinite: true,
+        });
+      }
+    }
 
     // Add linked characters
     if (characterIds && characterIds.length > 0) {

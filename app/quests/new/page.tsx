@@ -7,12 +7,13 @@ import { QuestForm, QuestFormData } from '@/components/quest/QuestForm';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import Link from 'next/link';
-import type { Skill, Location } from '@/lib/db/schema';
+import type { Skill, Location, Guild } from '@/lib/db/schema';
 
 export default function NewQuestPage() {
   const router = useRouter();
   const [skills, setSkills] = useState<Skill[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
+  const [guilds, setGuilds] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -23,9 +24,10 @@ export default function NewQuestPage() {
 
   const fetchData = async () => {
     try {
-      const [skillsRes, locationsRes] = await Promise.all([
+      const [skillsRes, locationsRes, guildsRes] = await Promise.all([
         fetch('/api/skills', { credentials: 'include' }),
         fetch('/api/locations', { credentials: 'include' }),
+        fetch('/api/guilds', { credentials: 'include' }),
       ]);
 
       if (skillsRes.ok) {
@@ -36,6 +38,11 @@ export default function NewQuestPage() {
       if (locationsRes.ok) {
         const locationsData = await locationsRes.json();
         setLocations(locationsData.locations || []);
+      }
+
+      if (guildsRes.ok) {
+        const guildsData = await guildsRes.json();
+        setGuilds(guildsData.guilds || []);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -60,7 +67,13 @@ export default function NewQuestPage() {
           difficulty: data.difficulty,
           deadline: data.deadline,
           locationId: data.locationId,
+          guildId: data.guildId,
           skillIds: data.skillIds,
+          characterIds: data.characterIds,
+          isInfinite: data.isInfinite,
+          durationMonths: data.durationMonths,
+          durationWeeks: data.durationWeeks,
+          subQuests: data.subQuests,
         }),
       });
 
@@ -114,6 +127,7 @@ export default function NewQuestPage() {
         <QuestForm 
           skills={skills}
           locations={locations}
+          guilds={guilds}
           onSubmit={handleSubmit}
           isLoading={submitting}
         />
