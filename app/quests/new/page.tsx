@@ -7,13 +7,14 @@ import { QuestForm, QuestFormData } from '@/components/quest/QuestForm';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import Link from 'next/link';
-import type { Skill, Location, Guild } from '@/lib/db/schema';
+import type { Skill, Location, Guild, Character } from '@/lib/db/schema';
 
 export default function NewQuestPage() {
   const router = useRouter();
   const [skills, setSkills] = useState<Skill[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [guilds, setGuilds] = useState<Guild[]>([]);
+  const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -24,10 +25,11 @@ export default function NewQuestPage() {
 
   const fetchData = async () => {
     try {
-      const [skillsRes, locationsRes, guildsRes] = await Promise.all([
+      const [skillsRes, locationsRes, guildsRes, charactersRes] = await Promise.all([
         fetch('/api/skills', { credentials: 'include' }),
         fetch('/api/locations', { credentials: 'include' }),
         fetch('/api/guilds', { credentials: 'include' }),
+        fetch('/api/characters', { credentials: 'include' }),
       ]);
 
       if (skillsRes.ok) {
@@ -43,6 +45,11 @@ export default function NewQuestPage() {
       if (guildsRes.ok) {
         const guildsData = await guildsRes.json();
         setGuilds(guildsData.guilds || []);
+      }
+
+      if (charactersRes.ok) {
+        const charactersData = await charactersRes.json();
+        setCharacters(charactersData.characters || []);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -128,6 +135,7 @@ export default function NewQuestPage() {
           skills={skills}
           locations={locations}
           guilds={guilds}
+          characters={characters}
           onSubmit={handleSubmit}
           isLoading={submitting}
         />
